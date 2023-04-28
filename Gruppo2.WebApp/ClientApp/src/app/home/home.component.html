@@ -7,6 +7,7 @@
     [hoverStateEnabled]="true"
     [showBorders]="true"
     [rowAlternationEnabled]="true"
+    (onRowInserted)="addUser($event)"
   >
   <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-search-panel [visible]="true"></dxo-search-panel>
