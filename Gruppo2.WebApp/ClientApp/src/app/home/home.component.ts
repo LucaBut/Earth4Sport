@@ -27,4 +27,9 @@ export class HomeComponent {
       }
       );
   }
+
+  addUser(e: any){
+    const body = e.data;
+    console.log(body)
+  }
 }
