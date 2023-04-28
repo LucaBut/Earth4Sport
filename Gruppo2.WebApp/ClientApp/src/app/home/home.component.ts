@@ -20,7 +20,7 @@ export class HomeComponent {
    getUser(){
     this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
       {
-        console.log(data)
+        this.users = data;
       },error =>
       {
         console.log(error)
