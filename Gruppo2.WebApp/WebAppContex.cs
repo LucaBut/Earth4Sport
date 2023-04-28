@@ -13,6 +13,11 @@ namespace Gruppo2.WebApp
 
         }
 
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<Activity> Activity { get; set; }
+        public virtual DbSet<ActivityContent> ActivityContent { get; set; }
+        public virtual DbSet<Device> Device { get; set; }
+
         public virtual DbSet<User> User { get; set; }
     }
 }
