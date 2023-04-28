@@ -1,17 +1,18 @@
-﻿using Gruppo2.WebApp.Entities;
+﻿using Gruppo2.WebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gruppo2.WebApp
 {
     public class WebAppContex: DbContext
     {
-        DbContext context;
-
         public WebAppContex()
+        {}
+
+        public WebAppContex(DbContextOptions<WebAppContex> options): base(options)
         {
-            
+
         }
 
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> User { get; set; }
     }
 }

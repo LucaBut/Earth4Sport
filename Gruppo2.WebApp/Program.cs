@@ -1,9 +1,29 @@
+using AutoMapper;
+using Gruppo2.WebApp;
+using Gruppo2.WebApp.Models.Profiles;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+
+
+
+
+builder.Services.AddDbContext<WebAppContex>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("db"));
+    options.EnableSensitiveDataLogging();
+    options.EnableDetailedErrors();
+});
+
+
+builder.Services.AddScoped<WebAppContex, WebAppContex>();
+builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -24,7 +44,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.Configuration.GetConnectionString("db");
 
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);

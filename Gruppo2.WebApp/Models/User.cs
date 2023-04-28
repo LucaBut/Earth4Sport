@@ -1,6 +1,6 @@
-﻿namespace Gruppo2.WebApp.Models.Dtos
+﻿namespace Gruppo2.WebApp.Models
 {
-    public class UserDto
+    public class User
     {
         public Guid? Id { get; set; }
         public string? Name { get; set; }
