@@ -24,12 +24,12 @@ namespace Gruppo2.WebApp.Controllers
         
 
         [HttpGet]
-        public async Task<ActionResult<bool>> GetUsersAsync()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
         {
-            List<User> users = new List<User>();
-            users = await _context.User.ToListAsync();
+            List<UserDto> users = new List<UserDto>();
+            //users = await _context.User.ToListAsync();
             Console.WriteLine(users);
-            return true;
+            return users;
         }
     }
 }
