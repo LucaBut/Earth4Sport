@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { UserModel } from '../models/user-model';
 
 @Component({
   selector: 'app-home',
@@ -7,12 +8,13 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
-  stringConnection: string = "https://localhost:7042"
+  stringConnection: string = "https://localhost:7042";
+  users: UserModel[] = [];
 
   constructor(private http: HttpClient){}
 
    getUser(){
-    this.http.get<any>(`${this.stringConnection}/user`).subscribe(data =>
+    this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
       {
         console.log(data)
       },error =>
