@@ -1,3 +1,24 @@
 <div>
-  <button (click)="getUser()">Click</button>
+  <dx-data-grid
+    [dataSource]="users"
+    [allowColumnReordering]="true"
+    [allowColumnResizing]="true"
+    [columnAutoWidth]="true"
+    [hoverStateEnabled]="true"
+    [showBorders]="true"
+    [rowAlternationEnabled]="true"
+  >
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxi-column dataField="id" [visible]="false"></dxi-column>
+    <dxi-column dataField="username"></dxi-column>
+    <dxi-column dataField="name"></dxi-column>
+    <dxi-column dataField="surname"></dxi-column>
+    <dxi-column dataField="birthDate" dataType="date"></dxi-column>
+    <dxi-column dataField="email"></dxi-column>
+    <dxi-column dataField="password" [visible]="false"></dxi-column>
+    <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
+
+    </dxo-editing>
+  </dx-data-grid>
 </div>

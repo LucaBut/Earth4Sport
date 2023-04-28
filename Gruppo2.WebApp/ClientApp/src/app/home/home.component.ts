@@ -13,10 +13,14 @@ export class HomeComponent {
 
   constructor(private http: HttpClient){}
 
+  ngOnInit(){
+    this.getUser()
+  }
+
    getUser(){
     this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
       {
-        console.log(data)
+        this.users = data;
       },error =>
       {
         console.log(error)
