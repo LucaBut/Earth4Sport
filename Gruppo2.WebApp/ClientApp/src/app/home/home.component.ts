@@ -32,4 +32,15 @@ export class HomeComponent {
     const body = e.data;
     console.log(body)
   }
+
+  handleInflux(){
+
+    // let ciao = {
+    //   name: 'ciao',
+    //   age: '18'
+    // }
+    let ciao: string = 'ciao'
+
+    this.http.get(`${this.stringConnection}/influx`).subscribe()
+  }
 }

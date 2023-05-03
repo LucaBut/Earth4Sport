@@ -3,6 +3,7 @@ using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Gruppo2.WebApp.Controllers
 {
@@ -21,18 +22,18 @@ namespace Gruppo2.WebApp.Controllers
 
         }
 
-        [HttpPost]
-        public Task Invoke()
+        [HttpGet]
+        public Task Invoke() //Non funzionante
         {
-            //_InfluxDbService.Write(write =>
-            //{
-            //    var point = PointData.Measurement("altitude")
-            //        .Tag("plane", "test-plane")
-            //        .Field("value", _random.Next(1000, 5000))
-            //        .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+            _InfluxDbService.Write(write =>
+            {
+                var point = PointData.Measurement("altitude")
+                    .Tag("plane", "test-plane")
+                    .Field("value", _random.Next(1000, 5000))
+                    .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
 
-            //    write.WritePoint("test-bucket", "organization", point);
-            //});
+                write.WritePoint(point, "test", "ciao");
+            });
 
             return Task.CompletedTask;
         }
