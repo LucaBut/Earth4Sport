@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.CommandLineUtils;
-using System;
-using System.Diagnostics.Metrics;
-using System.Threading;
-
-namespace app
+﻿namespace app
 {
     class Program
     {
