@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UserModel } from '../models/user-model';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ export class HomeComponent {
   stringConnection: string = "https://localhost:7042";
   users: UserModel[] = [];
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, public auth: AuthService){}
 
   ngOnInit(){
     this.getUser()
