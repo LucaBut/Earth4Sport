@@ -1,4 +1,5 @@
 ﻿using Gruppo2.WebApp.Models;
+using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.AspNetCore.Mvc;
@@ -23,19 +24,23 @@ namespace Gruppo2.WebApp.Controllers
         }
 
         [HttpGet]
-        public Task Invoke() //Non funzionante
+        public Task Invoke() 
         {
-            _InfluxDbService.Write(write =>
-            {
-                var point = PointData.Measurement("altitude")
-                    .Tag("plane", "test-plane")
-                    .Field("value", _random.Next(1000, 5000))
-                    .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+                Guid idActivity = Guid.NewGuid();
+                string idActivityStr = idActivity.ToString();
+                string position = "654654646546 ,67657657657";
+                string pulseRate = "192";    
 
-                write.WritePoint(point, "test", "ciao");
-            });
-
+                string record = idActivityStr + ";" + position + ";" + pulseRate;
+                _InfluxDbService.Write(record);
+               
             return Task.CompletedTask;
         }
+
+
+
+
+
+
     }
 }
