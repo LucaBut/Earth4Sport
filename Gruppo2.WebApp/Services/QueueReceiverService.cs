@@ -1,13 +1,14 @@
 ﻿using Azure.Storage.Queues;
-
+using Gruppo2.WebApp.Models;
+using System.Text.Json;
 
 namespace Gruppo2.WebApp.Services
 {
-    public class QueueReceiverService: BackgroundService
+    public class QueueReceiverService
     {
         private readonly ILogger<QueueReceiverService> _logger;
         private readonly string _cs;
-        public QueueSenderService(ILogger<QueueReceiverService> logger, IConfiguration configuration)
+        public QueueReceiverService(ILogger<QueueReceiverService> logger, IConfiguration configuration)
         {
             _logger = logger;
             _cs = configuration.GetConnectionString("storage");

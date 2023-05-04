@@ -1,8 +1,10 @@
 ﻿using Azure.Storage.Queues;
+using Gruppo2.WebApp.Models;
+using System.Text.Json;
 
 namespace Gruppo2.WebApp.Services
 {
-    public class QueueSenderService: BackgroundService
+    public class QueueSenderService
     {
         private readonly ILogger<QueueSenderService> _logger;
         private readonly string _cs;
@@ -12,7 +14,7 @@ namespace Gruppo2.WebApp.Services
             _cs = configuration.GetConnectionString("storage");
         }
 
-        public async AddElementinQueue(CancellationToken stoppingToken, ActivityContent activityContent)
+        public async Task AddElementinQueue(CancellationToken stoppingToken, ActivityContent activityContent)
         {
             var queueClient = new QueueClient(_cs, "queueprojectwork");
             await queueClient.CreateIfNotExistsAsync();
