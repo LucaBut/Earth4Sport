@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UserModel } from '../models/user-model';
 import { AuthService } from '@auth0/auth0-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +12,22 @@ export class HomeComponent {
 
   stringConnection: string = "https://localhost:7042";
   users: UserModel[] = [];
+  isLogged: Boolean = false;
 
-  constructor(private http: HttpClient, public auth: AuthService){}
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router){}
 
   ngOnInit(){
     this.getUser()
-    
+    this.checkIfLogged()
+  }
+
+  checkIfLogged() {
+    if (window.sessionStorage.getItem('isLogged') == 'false') {
+      this.isLogged = false;
+      this.route.navigateByUrl('')
+    } else {
+      this.isLogged = true;
+    }
   }
 
    getUser(){

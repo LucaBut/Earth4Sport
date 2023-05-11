@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="isLogged">
   <button (click)="handleInflux()">Click ME</button>
   <dx-data-grid
     [dataSource]="users"
