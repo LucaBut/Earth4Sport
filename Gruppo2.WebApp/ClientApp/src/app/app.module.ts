@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { DxDataGridModule, DxFormModule, DxButtonModule } from 'devextreme-angular';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { DxDataGridModule, DxFormModule, DxButtonModule } from 'devextreme-angul
     HomeComponent,
     LoginComponent,
     LogoutComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,6 +33,8 @@ import { DxDataGridModule, DxFormModule, DxButtonModule } from 'devextreme-angul
     RouterModule.forRoot([
       { path: '', component: LoginComponent, pathMatch: 'full' },
       { path: 'home', component: HomeComponent},
+      { path: '404', component: NotFoundComponent},
+      { path: '**', redirectTo: '/404'}
     ]),
     AuthModule.forRoot({
       domain: 'dev-a4110pdwo8van30s.us.auth0.com',
