@@ -10,46 +10,38 @@ namespace app
 
             string geoCoordinates = "";
             geoCoordinates = InitGeoCoordinates();
-            Console.WriteLine($"ciao {geoCoordinates}");
+            Console.WriteLine($"Init coordinate: {geoCoordinates}");
 
             Random nRandom = new Random();
             int randLatLong = nRandom.Next(0, 2);   // 0 viene modificata la latitudine (↔) (spostamento vert.)
                                                     // 1 viene modificate la longitudine (↕) (spostamento orizz.)
 
-            Console.WriteLine(randLatLong.ToString());
-
-            Thread.Sleep(5000);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine($"Se 0 modifica latit. / se 1 modifica longit.: {randLatLong}");
 
             int minValMovement = 0, maxValMovement = 0;
             LimitsForMovement(geoCoordinates, randLatLong, ref minValMovement, ref maxValMovement);
             
             int pulseRate = 0;
             pulseRate = InitPulseRate();
-
-            //Console.WriteLine(pulseRate);
+            Console.WriteLine($"Init battito cardiaco: {pulseRate}\n\n");
 
             while (true)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
 
                 ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving);
-                
 
-                //if (pulseRate > 30 && pulseRate < 200)
-                //{
-                //    Console.WriteLine($"\n{pulseRate}");
-                //    ModifyPulseRate(ref pulseRate);
-                //}
-                //else
-                //{
-                //    Console.WriteLine($"\n{pulseRate} - NO");
-                //    ReturnToNormalPulseRate(ref pulseRate);
-                //}
+                if (pulseRate > 30 && pulseRate < 200)
+                {
+                    Console.WriteLine($"Battito cardiaco: {pulseRate}");
+                    ModifyPulseRate(ref pulseRate);
+                }
+                else
+                {
+                    Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
+                    ReturnToNormalPulseRate(ref pulseRate);
+                }
             }
-
         }
 
         #region GeographicCoordinates
@@ -63,39 +55,30 @@ namespace app
             int latitudeDecimals = nRandom.Next(501, 999499);       //da 500 a (999999-500) perché dovrei gestire nel caso in cui i movimenti
             int longitudeDecimals = nRandom.Next(501, 999499);      //causino anche una modifica della parte intera delle coord.
 
-            string geoCoordinates = latitudeInt.ToString() + "." + latitudeDecimals.ToString().PadLeft(6, '0') + "," + 
-                                    longitudeInt.ToString() + "." + longitudeDecimals.ToString().PadLeft(6, '0');
+            string geoCoordinates = ComponingStringCoordinates(latitudeInt, latitudeDecimals, longitudeInt, longitudeDecimals);
 
             return geoCoordinates;
         }
 
-        // 45.951548, 12.679304
-        // 45.951548, 12.679304
-        // in orizzontale varia la longitudine di 0.000650 circa => spostamento di 50 metri, corrispondente a una vasca
-
-        // 45.953165, 12.688238
-        // 45.953605, 12.688238
-        // in verticale varia la latitudine  di 0.000440 circa => spostamento di 50 metri, corrispondente a una vasca
-        //              0.000500
-        static void ModifyGeoCoordinates(ref string geoCoordinates, int randLatLong, int minValMovement, int maxValMovement, ref bool moving)
+        static void ModifyGeoCoordinates(ref string geoCoordinates, int randLatLong, int minValMovement,
+                                         int maxValMovement, ref bool moving)
         {
             int latitudeDecimals = 0, longitudeDecimals = 0, latitudeInt = 0, longitudeInt = 0;
             SplitCoordinates(geoCoordinates, ref latitudeInt, ref latitudeDecimals, ref longitudeInt, ref longitudeDecimals);
             
             Random nRandom = new Random();
             int movement = nRandom.Next(80, 110);
-            Console.WriteLine(movement.ToString());
+            //Console.WriteLine(movement.ToString());       //distanza percorsa nell'intervallo delle due rilevazioni
             
             if (randLatLong == 0)
             {
                 // SPOSTAMENTO LATITUDINE: mi sposto verticalmente, longitudine rimane uguale, modifico latitudine
-
-                if (moving == true)
+                if (moving)
                 {
-                    //somma il nRandom
+                    // controllo se lo spostamento andrebbe oltre il limite della piscina: in questo caso torno indietro della differenza
                     if ((latitudeDecimals + movement) > maxValMovement)
                     {
-                        moving = false;
+                        moving = false;     // l'atleta cambia direzione
 
                         int diff = (latitudeDecimals + movement) - maxValMovement;
                         latitudeDecimals = maxValMovement - diff;
@@ -107,10 +90,10 @@ namespace app
                 }
                 else
                 {
-                    //diminuisci del nRandom
+                    // controllo se lo spostamento andrebbe oltre il limite della piscina: in questo caso torno indietro della differenza
                     if ((latitudeDecimals - movement) < minValMovement)
                     {
-                        moving = true;
+                        moving = true;      // l'atleta cambia direzione
 
                         int diff = minValMovement - (latitudeDecimals - movement);
                         latitudeDecimals = minValMovement + diff;
@@ -124,13 +107,12 @@ namespace app
             else
             {
                 // SPOSTAMENTO LONGITUDINE: mi sposto orizzontalmente, latitudine rimane uguale, modifico longitudine
-
                 if (moving)
                 {
-                    //somma il nRandom
+                    // controllo se lo spostamento andrebbe oltre il limite della piscina: in questo caso torno indietro della differenza
                     if ((longitudeDecimals + movement) > maxValMovement)
                     {
-                        moving = false;
+                        moving = false;      // l'atleta cambia direzione
 
                         int diff = (longitudeDecimals + movement) - maxValMovement;
                         longitudeDecimals = maxValMovement - diff;
@@ -142,10 +124,10 @@ namespace app
                 }
                 else
                 {
-                    //diminuisci del nRandom
+                    // controllo se lo spostamento andrebbe oltre il limite della piscina: in questo caso torno indietro della differenza
                     if ((longitudeDecimals - movement) < minValMovement)
                     {
-                        moving = true;
+                        moving = true;      // l'atleta cambia direzione
 
                         int diff = (longitudeDecimals - movement) - minValMovement;
                         longitudeDecimals = minValMovement - diff;
@@ -158,17 +140,15 @@ namespace app
 
             }
 
-            //funzione per ricomporre la stringa delle coordinate completa
-            geoCoordinates = ComponingStringCoordinates(geoCoordinates, latitudeInt, latitudeDecimals, longitudeInt, longitudeDecimals);
-
-            Console.WriteLine(geoCoordinates);
+            geoCoordinates = ComponingStringCoordinates(latitudeInt, latitudeDecimals, longitudeInt, longitudeDecimals);
+            Console.WriteLine($"Coordinate modificate: {geoCoordinates}");
         }
 
-        static string ComponingStringCoordinates(string geoCoordinates, int latitudeInt, int latitudeDecimals,
-                                          int longitudeInt, int longitudeDecimals)
+        static string ComponingStringCoordinates(int latitudeInt, int latitudeDecimals,
+                                                 int longitudeInt, int longitudeDecimals)
         {
-            geoCoordinates = latitudeInt.ToString() + "." + latitudeDecimals.ToString().PadLeft(6, '0') + "," +
-                             longitudeInt.ToString() + "." + longitudeDecimals.ToString().PadLeft(6, '0');
+            string geoCoordinates = latitudeInt.ToString() + "." + latitudeDecimals.ToString().PadLeft(6, '0') + "," +
+                                    longitudeInt.ToString() + "." + longitudeDecimals.ToString().PadLeft(6, '0');
 
             return geoCoordinates;
         }
@@ -179,7 +159,7 @@ namespace app
 
             if (randLatLong == 0)
             {
-                // modifico solo latitudine
+                // modifico solo LATITUDINE
                 SplitCoordinates(geoCoordinates, ref latitudeInt, ref latitudeDecimals, ref longitudeInt, ref longitudeDecimals);
 
                 minValMovement = latitudeDecimals;
@@ -187,7 +167,7 @@ namespace app
             }
             else
             {
-                // modifico solo longitudine
+                // modifico solo LONGITUDINE
                 SplitCoordinates(geoCoordinates, ref latitudeInt, ref latitudeDecimals, ref longitudeInt, ref longitudeDecimals);
 
                 minValMovement = longitudeDecimals;
@@ -196,7 +176,7 @@ namespace app
         }
 
         static void SplitCoordinates(string geoCoordinates, ref int latitudeInt, ref int latitudeDecimals,
-                              ref int longitudeInt, ref int longitudeDecimals)
+                                     ref int longitudeInt, ref int longitudeDecimals)
         {
             string[] splittedCoordinates = geoCoordinates.Split(new char[] { ',' });
 
@@ -207,11 +187,7 @@ namespace app
             string[] onlyLongitude = splittedCoordinates[1].Split(new char[] { '.' });
             longitudeInt = Int32.Parse(onlyLongitude[0]);
             longitudeDecimals = Int32.Parse(onlyLongitude[1]);
-            
-            //Console.WriteLine($"{latitudeDecimals} ..... {longitudeDecimals}");
         }
-
-
 
         #endregion
 
@@ -221,7 +197,7 @@ namespace app
         static int InitPulseRate()
         {
             Random nRandom = new Random();
-            int pulseRate = nRandom.Next(40, 190);        //40 a 190
+            int pulseRate = nRandom.Next(40, 190);        // da 40 a 190
 
             return pulseRate;
         }
