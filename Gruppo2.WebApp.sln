@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gruppo2.WebApp", "Gruppo2.WebApp\Gruppo2.WebApp.csproj", "{67132382-020B-4038-91FB-51D899C5EA5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gruppo2.SmartwatchSimulator", "Gruppo2.SmartwatchSimulator\Gruppo2.SmartwatchSimulator.csproj", "{30D42DE6-9710-4B58-8B3C-7D13A6C4D847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gruppo2.SmartwatchSimulator", "Gruppo2.SmartwatchSimulator\Gruppo2.SmartwatchSimulator.csproj", "{30D42DE6-9710-4B58-8B3C-7D13A6C4D847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
