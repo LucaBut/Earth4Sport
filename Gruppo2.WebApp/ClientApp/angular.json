@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "Gruppo2.WebApp"
+  "defaultProject": "Gruppo2.WebApp",
+  "cli": {
+    "analytics": false
+  }
 }

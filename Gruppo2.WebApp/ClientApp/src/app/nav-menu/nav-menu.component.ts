@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
+import {Router} from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,7 +9,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
+  constructor(public auth: AuthService,private route: Router, @Inject(DOCUMENT) public document: Document){}
+
   isExpanded = false;
+  isLogged: boolean = false;
 
   collapse() {
     this.isExpanded = false;
@@ -15,4 +21,5 @@ export class NavMenuComponent {
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
+
 }

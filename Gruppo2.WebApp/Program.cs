@@ -2,6 +2,7 @@ using AutoMapper;
 using Gruppo2.WebApp;
 using Gruppo2.WebApp.Models.Profiles;
 using Microsoft.EntityFrameworkCore;
+using Coravel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<WebAppContex>(options =>
 
 
 builder.Services.AddScoped<WebAppContex, WebAppContex>();
+builder.Services.AddSingleton<InfluxDBService>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddCors(options =>
 {
@@ -31,7 +33,7 @@ builder.Services.AddCors(options =>
                       {
                           policy.WithOrigins("https://localhost:7042",
                                               "http://localhost:5151",
-                                              "http://localhost:44490").AllowAnyOrigin().AllowAnyMethod();
+                                              "http://localhost:44490").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                       });
 });
 
@@ -49,7 +51,6 @@ app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseStaticFiles();
 app.UseRouting();
-
 
 app.MapControllerRoute(
     name: "default",
