@@ -12,6 +12,7 @@ export class NavMenuComponent {
   constructor(public auth: AuthService,private route: Router, @Inject(DOCUMENT) public document: Document){}
 
   isExpanded = false;
+  isLogged: boolean = false;
 
   collapse() {
     this.isExpanded = false;
@@ -21,11 +22,4 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  handleLogout(){
-    this.auth.logout({
-      logoutParams: {
-        returnTo: this.document.location.origin
-      }
-    });
-  }
 }

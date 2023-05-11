@@ -1,3 +1,5 @@
-<div>
-  <dx-button text="Login" (onClick)="handleLoginSubmit()"></dx-button>
+<div align="center" *ngIf="!isLogged">
+  <div class="login">
+    <dx-button text="Login" type="success" (onClick)="handleLoginSubmit()"></dx-button>
+  </div>
 </div>

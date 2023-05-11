@@ -4,6 +4,7 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -28,10 +29,8 @@ import { DxDataGridModule, DxFormModule, DxButtonModule } from 'devextreme-angul
     DxFormModule,
     DxButtonModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'login', component: LoginComponent },
-      { path: 'logout', component: LogoutComponent }
-      // { path: 'fetch-data', component: FetchDataComponent },
+      { path: '', component: LoginComponent, pathMatch: 'full' },
+      { path: 'home', component: HomeComponent},
     ]),
     AuthModule.forRoot({
       domain: 'dev-a4110pdwo8van30s.us.auth0.com',

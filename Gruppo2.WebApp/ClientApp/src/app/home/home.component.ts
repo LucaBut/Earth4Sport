@@ -16,6 +16,7 @@ export class HomeComponent {
 
   ngOnInit(){
     this.getUser()
+    
   }
 
    getUser(){
@@ -27,6 +28,8 @@ export class HomeComponent {
         console.log(error)
       }
       );
+
+      console.log(window.location.origin)
   }
 
   addUser(e: any){
