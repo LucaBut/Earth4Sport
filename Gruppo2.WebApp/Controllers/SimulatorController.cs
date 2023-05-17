@@ -8,7 +8,7 @@ namespace Gruppo2.WebApp.Controllers
     [Route("[controller]")]
     public class SimulatorController : ControllerBase
     {
-        private readonly SimulatorService _simulator;
+        private readonly SimulatorService  _simulator;
         public SimulatorController(SimulatorService simulator)
         {
             _simulator = simulator;
@@ -20,6 +20,12 @@ namespace Gruppo2.WebApp.Controllers
         {
             _simulator.Start();
              throw new Exception();
+        }
+        [HttpGet("StopOperation")]
+        public async Task StopOperation()
+        {
+            _simulator.Stop();
+            throw new Exception();
         }
     }
 }

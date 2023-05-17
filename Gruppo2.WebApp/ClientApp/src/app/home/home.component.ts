@@ -48,14 +48,12 @@ export class HomeComponent {
     console.log(body)
   }
 
-  handleInflux(){
-
-    // let ciao = {
-    //   name: 'ciao',
-    //   age: '18'
-    // }
-    let ciao: string = 'ciao'
-
-    this.http.get(`${this.stringConnection}/influx`).subscribe()
+  startSimulator()
+  {
+    this.http.get(`${this.stringConnection}/simulator/StartOperation`).subscribe()
+  }
+  stopSimulator()
+  {
+    this.http.get(`${this.stringConnection}/simulator/StopOperation`).subscribe()
   }
 }

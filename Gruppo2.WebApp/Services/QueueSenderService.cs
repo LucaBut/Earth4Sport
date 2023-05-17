@@ -6,11 +6,9 @@ namespace Gruppo2.WebApp.Services
 {
     public class QueueSenderService
     {
-        private readonly ILogger<QueueSenderService> _logger;
         private readonly string _cs;
-        public QueueSenderService(ILogger<QueueSenderService> logger, IConfiguration configuration)
+        public QueueSenderService(IConfiguration configuration)
         {
-            _logger = logger;
             _cs = configuration.GetConnectionString("storage");
         }
 

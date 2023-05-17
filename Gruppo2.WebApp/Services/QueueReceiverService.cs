@@ -6,11 +6,9 @@ namespace Gruppo2.WebApp.Services
 {
     public class QueueReceiverService
     {
-        private readonly ILogger<QueueReceiverService> _logger;
         private readonly string _cs;
-        public QueueReceiverService(ILogger<QueueReceiverService> logger, IConfiguration configuration)
+        public QueueReceiverService(IConfiguration configuration)
         {
-            _logger = logger;
             _cs = configuration.GetConnectionString("storage");
         }
 
