@@ -56,4 +56,11 @@ export class HomeComponent {
   {
     this.http.get(`${this.stringConnection}/simulator/StopOperation`).subscribe()
   }
+
+
+  getActivitiesByIDActivity()
+  {
+    this.http.get(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe()
+  }
+
 }

@@ -2,6 +2,7 @@
 using Gruppo2.WebApp.Services;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
+using InfluxDB.Client.Core.Flux.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,6 +25,20 @@ namespace Gruppo2.WebApp.Controllers
             _InfluxDbService = influxDbService;
 
         }
+
+        
+
+
+        [HttpGet("GetActivitiesContentbyIDActivity")]
+        public async Task<IEnumerable<FluxTable>> GetActivitiesContentbyIDActivity()
+        {
+            Guid idActivity = new Guid();
+            List<FluxTable> fluxTables = (List<FluxTable>)await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);
+            return fluxTables;
+        }
+
+
+
 
         [HttpGet]
         public Task Invoke()
