@@ -2,7 +2,9 @@
 using Gruppo2.WebApp.Models;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
+using InfluxDB.Client.Writes;
 using InfluxDB.Client.Core;
+using InfluxDB.Client.Core.Flux.Domain;
 using System.Net.Sockets;
 
 namespace Gruppo2.WebApp
@@ -20,6 +22,52 @@ namespace Gruppo2.WebApp
             _bucket = configuration.GetValue<string>("InfluxDB:Bucket");
             _organization = configuration.GetValue<string>("InfluxDB:Organization");
             _url = configuration.GetValue<string>("InfluxDB:Url");
+        }
+
+
+        public async Task<IEnumerable<FluxTable>> GetActivityContentsByIDActivity(Guid idActivity)
+        {
+            using var client = InfluxDBClientFactory.Create(_url, _token);//apri connessione a influxdb
+            
+            string query = "from(bucket: \"" + _bucket + "\"" + ") |> range(start: 0)"; // Esempio di query per ottenere i dati degli ultimi 60 minuti
+
+
+
+            //string queryFiltered = "from(bucket: \"" + _bucket + "\") |> range(start: -1h) " +
+            //                   "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
+
+            
+            QueryApi queryApi = client.GetQueryApi();
+            
+            
+            List<FluxTable> tables = await queryApi.QueryAsync(query, _organization);
+            client.Dispose();//per chiudere connessione
+
+
+            //// Leggi i dati restituiti
+            foreach (FluxTable table in tables)
+            {
+                // Leggi le righe dei risultati
+                List<FluxRecord> records = table.Records;
+
+                foreach (FluxRecord record in records)
+                {
+                    // Leggi i campi e i valori del record
+                    Dictionary<string, object> values = record.Values;
+
+                    foreach (KeyValuePair<string, object> field in values)
+                    {
+                        string fieldName = field.Key;
+                        object fieldValue = field.Value;
+
+                        // Gestisci i dati come necessario
+                        Console.WriteLine(fieldName + ": " + fieldValue);
+                    }
+                }
+            }
+
+            return tables;
+
         }
 
         public void Write(string record)

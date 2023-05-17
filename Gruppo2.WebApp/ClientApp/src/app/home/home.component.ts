@@ -27,6 +27,7 @@ export class HomeComponent {
       this.route.navigateByUrl('')
     } else {
       this.isLogged = true;
+      this.getActivitiesByIDActivity()
     }
   }
 
@@ -56,4 +57,11 @@ export class HomeComponent {
   {
     this.http.get(`${this.stringConnection}/simulator/StopOperation`).subscribe()
   }
+
+
+  getActivitiesByIDActivity()
+  {
+    this.http.get(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe()
+  }
+
 }

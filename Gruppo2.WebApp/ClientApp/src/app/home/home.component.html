@@ -1,6 +1,9 @@
 <div *ngIf="isLogged">
   <button (click)="startSimulator()">Start</button>
   <button (click)="stopSimulator()">Start</button>
+
+
+  
   <dx-data-grid
     [dataSource]="users"
     [allowColumnReordering]="true"
