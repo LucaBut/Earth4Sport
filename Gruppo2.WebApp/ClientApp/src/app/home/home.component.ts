@@ -19,6 +19,7 @@ export class HomeComponent {
   ngOnInit(){
     this.getUser()
     this.checkIfLogged()
+    this.getActivitiesByIDActivity()
   }
 
   checkIfLogged() {
