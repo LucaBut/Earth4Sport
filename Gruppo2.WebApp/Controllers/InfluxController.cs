@@ -16,23 +16,19 @@ namespace Gruppo2.WebApp.Controllers
     public class InfluxController : ControllerBase
     {
         private readonly InfluxDBService _InfluxDbService;
-        //private static readonly Random _random = new Random();
-        //private readonly SimulatorService _simulator;
-
-        public InfluxController(InfluxDBService influxDbService/*, SimulatorService simulator*/)
+        
+        public InfluxController(InfluxDBService influxDbService)
         {
-            //_simulator = simulator;
             _InfluxDbService = influxDbService;
-
         }
 
         
 
 
-        [HttpGet("GetActivitiesContentbyIDActivity")]
+        [HttpGet("GetActivitiesContentbyIDActivity")]//per leggere le tabelle di influx filtrate per idActivity
         public async Task<IEnumerable<FluxTable>> GetActivitiesContentbyIDActivity()
         {
-            Guid idActivity = new Guid();
+            Guid idActivity = new Guid();//arriva diverso in base alla activity selezionata 
             List<FluxTable> fluxTables = (List<FluxTable>)await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);
             return fluxTables;
         }
@@ -43,15 +39,8 @@ namespace Gruppo2.WebApp.Controllers
         [HttpGet]
         public Task Invoke()
         {
-            //Guid idActivity = Guid.NewGuid();
-            //string idActivityStr = idActivity.ToString();
-            //string position = "654654646546 ,67657657657";
-            //string pulseRate = "192";
-            //_simulatorService.Start();
-            Start();
-            //string record = idActivityStr + ";" + position + ";" + pulseRate;
-            //_InfluxDbService.Write(record);
-
+            
+            Start();//per adesso simulatore qua per prova ma sul suo servizio
             return Task.CompletedTask;
         }
         static void Start()
