@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 <!-- <div *ngIf="isLogged">
  
-=======
-<div *ngIf="isLogged">
-  <button (click)="startSimulator()">Start</button>
-  <button (click)="stopSimulator()">Start</button>
-
-  
->>>>>>> c86b3d4bf3687c73a8ee8049acb359db858e3cc6
   <dx-data-grid
     [dataSource]="users"
     [allowColumnReordering]="true"
@@ -41,17 +33,17 @@
     <div class="dx-field">
       <div class="dx-field-label">Devices</div>
       <div class="dx-field-value">
-        <dx-select-box [dataSource]="allDevicesNames" [value]="deviceNameSelected"></dx-select-box>
+        <dx-select-box [dataSource]="allDevicesNames" [value]="deviceNameSelected" (selectedItemChange)="changeDevice($event)"></dx-select-box>
       </div>
     </div> 
   </div>
 
   <!-- SELECT ACTIVITIES -->
-  <div class="dx-fieldset">
-    <div class="dx-field">
-      <div class="dx-field-label">Activities</div>
-      <div class="dx-field-value">
-        <dx-select-box [dataSource]="allActivitiesNames" [value]="activityNameSelected"></dx-select-box>
+  <div class="dx-fieldset" >
+    <div class="dx-field"style="width: 400px;">
+      <div class="dx-field-label" >Activities</div>
+      <div class="dx-field-value" >
+        <dx-select-box [dataSource]="allActivitiesNames" [value]="activityNameSelected" (selectedItemChange)="changeActivity($event)"></dx-select-box>
       </div>
     </div>
   </div>

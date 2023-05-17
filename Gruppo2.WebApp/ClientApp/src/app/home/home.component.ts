@@ -30,7 +30,7 @@ export class HomeComponent {
   ngOnInit(){
     this.getUser()
     this.checkIfLogged()
-    this.getActivitiesByIDActivity()
+    this.getActivityContentsByIDActivity()
   }
 
   checkIfLogged() {
@@ -66,7 +66,6 @@ export class HomeComponent {
         if(devices != null)
         {
           this.allDevices = devices
-
           this.getActivitiesByIDDevice(this.allDevices[0].id)
           this.allDevices.forEach(x => 
             {
@@ -77,17 +76,19 @@ export class HomeComponent {
       })
   }
 
-  getActivitiesByIDDevice(idDeviceStr: string)
+  getActivitiesByIDDevice(idDeviceStr: any)
   {
+    this.allActivities = []
+    this.allActivitiesNames = []
+    this.activityNameSelected = null
     this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities => 
       {
         if(activities != null)
         {
-          this.allActivities = activities
-          
+          this.allActivities = activities          
           this.allActivities.forEach((x: any, index: any) => 
             {
-              this.allActivitiesNames.push("Allenamento: " + (index + 1))
+              this.allActivitiesNames.push("Allenamento: " + x.id)
             })
             this.activityNameSelected = this.allActivitiesNames[0]
         }
@@ -113,9 +114,24 @@ export class HomeComponent {
   }
 
 
-  getActivitiesByIDActivity()
+  getActivityContentsByIDActivity()
   {
     this.http.get(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe()
   }
 
+
+  changeDevice(event: any)
+  {
+    console.log(event)
+    let idDevice = this.allDevices.find(x => x.name == event)?.id.toString()
+    this.getActivitiesByIDDevice(idDevice) 
+  }
+
+
+  changeActivity(event: any)
+  {
+    console.log(event)
+
+    //getActivityContents
+  }
 }
