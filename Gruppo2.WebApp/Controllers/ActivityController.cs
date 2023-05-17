@@ -29,5 +29,13 @@ namespace Gruppo2.WebApp.Controllers
             Console.WriteLine(activitys);
             return true;
         }
+        [HttpGet("GetActivitiesbyIDDevice")]
+        public async Task<ActionResult<bool>> GetActivitiesbyIDDevice()
+        {
+            List<Models.Activity> activitys = new List<Models.Activity>();
+            activitys = await _context.Activity.ToListAsync();
+            Console.WriteLine(activitys);
+            return true;
+        }
     }
 }

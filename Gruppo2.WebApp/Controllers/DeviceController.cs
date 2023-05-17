@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -27,5 +28,26 @@ namespace Gruppo2.WebApp.Controllers
             Console.WriteLine(devices);
             return true;
         }
+
+
+        [HttpGet("GetDevicesbyIDUser/{idUser}")]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetDeviceAsync(Guid idUser)
+        {
+            List<Device> devices = new List<Device>();
+
+            //recupero devices filtrati per idUser
+            devices = await _context.Device
+                                    .Where(x => x.IDUser == idUser)
+                                    .ToListAsync();
+            if (!devices.Any())
+                return NoContent();
+            
+            List<DeviceDto> deviceDtos = new List<DeviceDto>();
+            //questo serve per mappare i Models con i ModelsDto
+            _mapper.Map(devices, deviceDtos);
+
+            return deviceDtos;
+        }
+
     }
 }
