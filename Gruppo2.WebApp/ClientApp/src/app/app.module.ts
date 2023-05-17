@@ -11,7 +11,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
-import { DxDataGridModule, DxFormModule, DxButtonModule } from 'devextreme-angular';
+import { DxDataGridModule, DxFormModule, DxButtonModule,DxSelectBoxModule } from 'devextreme-angular';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -28,7 +28,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     HttpClientModule,
     FormsModule,
     DxDataGridModule,
-    DxFormModule,
+    DxFormModule,    
+    DxSelectBoxModule,
     DxButtonModule,
     RouterModule.forRoot([
       { path: '', component: LoginComponent, pathMatch: 'full' },
