@@ -24,18 +24,27 @@ namespace Gruppo2.WebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<bool>> GetActivityAsync()
         {
-            List<Models.Activity> activitys = new List<Models.Activity>();
-            activitys = await _context.Activity.ToListAsync();
-            Console.WriteLine(activitys);
+            List<Models.Activity> activities = new List<Models.Activity>();
+            activities = await _context.Activity.ToListAsync();
+            Console.WriteLine(activities);
             return true;
         }
-        [HttpGet("GetActivitiesbyIDDevice")]
-        public async Task<ActionResult<bool>> GetActivitiesbyIDDevice()
+        [HttpGet("GetActivitiesbyIDDevice/{idDevice}")]
+        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetActivitiesbyIDDevice(Guid idDevice)
         {
-            List<Models.Activity> activitys = new List<Models.Activity>();
-            activitys = await _context.Activity.ToListAsync();
-            Console.WriteLine(activitys);
-            return true;
+            //put in list activity filtered by id device from db
+            List<Models.Activity> activities = new List<Models.Activity>();
+            activities = await _context.Activity.Where(x => x.IDDevice == idDevice)
+                                                .ToListAsync();
+            if (!activities.Any())
+                return NoContent();
+
+            
+            List<ActivityDto> activityDtos= new List<ActivityDto>();
+            _mapper.Map(activities, activityDtos);
+            //map activity list from db to a list to pass in frontend (dto)
+
+            return activityDtos;
         }
     }
 }

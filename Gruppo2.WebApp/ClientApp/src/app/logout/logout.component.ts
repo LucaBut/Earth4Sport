@@ -26,13 +26,16 @@ export class LogoutComponent {
   }
 
   handleLogoutSubmit(){
+    window.sessionStorage.removeItem('isLogged')
     this.auth.logout({
       logoutParams:{
         returnTo: this.document.location.origin
       }
     })
-    window.sessionStorage.removeItem('isLogged')
-    this.route.navigateByUrl('')
+    setTimeout(() => {
+      this.route.navigateByUrl('')
+    }, 500)
+
   }
 
 }
