@@ -7,6 +7,10 @@ namespace app
         static void Main()
         {
             bool moving = true;     // true quando sta avanzando, false quando torna indietro (andamento nella piscina)
+            int nPools = 0;
+
+            Guid idActivity = Guid.NewGuid();
+            Console.WriteLine($"ID activity: {idActivity}");
 
             string geoCoordinates = "";
             geoCoordinates = InitGeoCoordinates();
@@ -29,7 +33,7 @@ namespace app
             {
                 Thread.Sleep(10000);
 
-                ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving);
+                ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving, ref nPools);
 
                 if (pulseRate > 30 && pulseRate < 200)
                 {
@@ -61,7 +65,7 @@ namespace app
         }
 
         static void ModifyGeoCoordinates(ref string geoCoordinates, int randLatLong, int minValMovement,
-                                         int maxValMovement, ref bool moving)
+                                         int maxValMovement, ref bool moving, ref int nPools)
         {
             int latitudeDecimals = 0, longitudeDecimals = 0, latitudeInt = 0, longitudeInt = 0;
             SplitCoordinates(geoCoordinates, ref latitudeInt, ref latitudeDecimals, ref longitudeInt, ref longitudeDecimals);
@@ -79,6 +83,7 @@ namespace app
                     if ((latitudeDecimals + movement) > maxValMovement)
                     {
                         moving = false;     // l'atleta cambia direzione
+                        nPools += 1;        
 
                         int diff = (latitudeDecimals + movement) - maxValMovement;
                         latitudeDecimals = maxValMovement - diff;
@@ -94,6 +99,7 @@ namespace app
                     if ((latitudeDecimals - movement) < minValMovement)
                     {
                         moving = true;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = minValMovement - (latitudeDecimals - movement);
                         latitudeDecimals = minValMovement + diff;
@@ -113,6 +119,7 @@ namespace app
                     if ((longitudeDecimals + movement) > maxValMovement)
                     {
                         moving = false;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = (longitudeDecimals + movement) - maxValMovement;
                         longitudeDecimals = maxValMovement - diff;
@@ -128,6 +135,7 @@ namespace app
                     if ((longitudeDecimals - movement) < minValMovement)
                     {
                         moving = true;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = (longitudeDecimals - movement) - minValMovement;
                         longitudeDecimals = minValMovement - diff;
@@ -142,6 +150,7 @@ namespace app
 
             geoCoordinates = ComponingStringCoordinates(latitudeInt, latitudeDecimals, longitudeInt, longitudeDecimals);
             Console.WriteLine($"Coordinate modificate: {geoCoordinates}");
+            Console.WriteLine($"Vasche fatte dall'inizio dell'allenamento: {nPools}");
         }
 
         static string ComponingStringCoordinates(int latitudeInt, int latitudeDecimals,
