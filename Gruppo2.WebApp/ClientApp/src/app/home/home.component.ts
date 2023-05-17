@@ -4,6 +4,8 @@ import { UserModel } from '../models/user-model';
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
 import { Device } from 'devextreme/core/devices';
+import { DeviceModel } from '../models/device-model';
+import { ActivityModel } from '../models/activity-model';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,14 @@ export class HomeComponent {
   stringConnection: string = "https://localhost:7042";
   users: UserModel[] = [];
   isLogged: Boolean = false;
-  allDevices: Device[] =  []
+  allDevices: DeviceModel[] =  []
+  allDevicesNames: any[] = []
+
+  allActivities: ActivityModel[] = []
+  allActivitiesNames: any[] = []
+
+  activityNameSelected: any
+  deviceNameSelected: any
 
   constructor(private http: HttpClient, public auth: AuthService, private route: Router){}
 
@@ -52,14 +61,40 @@ export class HomeComponent {
 
   getDevicesbyIDUser(idUserStr: any)
   {
-    this.http.get<Device[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices => 
+    this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices => 
       {
         if(devices != null)
         {
           this.allDevices = devices
+
+          this.getActivitiesByIDDevice(this.allDevices[0].id)
+          this.allDevices.forEach(x => 
+            {
+              this.allDevicesNames.push(x.name)
+            })
+            this.deviceNameSelected = this.allDevicesNames[0]
         }
       })
   }
+
+  getActivitiesByIDDevice(idDeviceStr: string)
+  {
+    this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities => 
+      {
+        if(activities != null)
+        {
+          this.allActivities = activities
+          
+          this.allActivities.forEach((x: any, index: any) => 
+            {
+              this.allActivitiesNames.push("Allenamento: " + (index + 1))
+            })
+            this.activityNameSelected = this.allActivitiesNames[0]
+        }
+      })
+  }
+
+  
 
 
 

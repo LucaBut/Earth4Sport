@@ -1,7 +1,5 @@
-<div *ngIf="isLogged">
-  <button (click)="startSimulator()">Start</button>
-  <button (click)="stopSimulator()">Start</button>
-
+<!-- <div *ngIf="isLogged">
+ 
   <dx-data-grid
     [dataSource]="users"
     [allowColumnReordering]="true"
@@ -25,15 +23,33 @@
 
     </dxo-editing>
   </dx-data-grid>
-</div>
+</div> -->
 
 
-<!-- SELECT DEVICE -->
-<div class="dx-fieldset">
-  <div class="dx-field">
-    <div class="dx-field-label">Default mode</div>
-    <div class="dx-field-value">
-      <dx-select-box [dataSource]="allDevices"></dx-select-box>
+
+<div style="display: flex;">
+  <!-- SELECT DEVICE -->
+  <div class="dx-fieldset">
+    <div class="dx-field">
+      <div class="dx-field-label">Devices</div>
+      <div class="dx-field-value">
+        <dx-select-box [dataSource]="allDevicesNames" [value]="deviceNameSelected"></dx-select-box>
+      </div>
+    </div> 
+  </div>
+
+  <!-- SELECT ACTIVITIES -->
+  <div class="dx-fieldset">
+    <div class="dx-field">
+      <div class="dx-field-label">Activities</div>
+      <div class="dx-field-value">
+        <dx-select-box [dataSource]="allActivitiesNames" [value]="activityNameSelected"></dx-select-box>
+      </div>
     </div>
   </div>
+
 </div>
+
+
+
+

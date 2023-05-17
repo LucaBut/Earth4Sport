@@ -1,4 +1,4 @@
-export interface Device 
+export interface DeviceModel 
 {
     id: string;
     productionBatch: string | null;
