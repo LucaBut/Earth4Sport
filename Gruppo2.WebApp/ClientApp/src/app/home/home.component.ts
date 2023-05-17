@@ -22,11 +22,11 @@ export class HomeComponent {
   }
 
   checkIfLogged() {
-    if (window.sessionStorage.getItem('isLogged') == 'false') {
+    if (window.sessionStorage.getItem('isLogged')) {
+      this.isLogged = true;
+    } else {
       this.isLogged = false;
       this.route.navigateByUrl('')
-    } else {
-      this.isLogged = true;
     }
   }
 

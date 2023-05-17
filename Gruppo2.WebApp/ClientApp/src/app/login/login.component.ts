@@ -17,10 +17,11 @@ export class LoginComponent implements OnInit {
   }
 
   checkIfLogged() {
-    if (window.sessionStorage.getItem('isLogged') == 'false') {
-      this.isLogged = false;
-    } else {
+    if (window.sessionStorage.getItem('isLogged')) {
       this.isLogged = true;
+    } else {
+      this.isLogged = false;
+      this.handleLoginSubmit()
     }
   }
 

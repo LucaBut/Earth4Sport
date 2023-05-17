@@ -1,6 +1,7 @@
 import { Component, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logout',
@@ -10,28 +11,28 @@ import { AuthService } from '@auth0/auth0-angular';
 export class LogoutComponent {
   @Input() isLogged: boolean = true;
 
-  constructor(private auth: AuthService, @Inject(DOCUMENT) public document: Document){}
+  constructor(private auth: AuthService, @Inject(DOCUMENT) public document: Document, private route: Router){}
 
   ngOnInit(){
     this.checkIfLogged()
   }
 
   checkIfLogged(){
-    if(window.sessionStorage.getItem('isLogged') == 'false'){
-      this.isLogged = false;
-    }else{
+    if(window.sessionStorage.getItem('isLogged')){
       this.isLogged = true;
+    }else{
+      // this.route.navigateByUrl('')
     }
   }
 
   handleLogoutSubmit(){
-    window.sessionStorage.setItem('isLogged', 'false');
     this.auth.logout({
       logoutParams:{
         returnTo: this.document.location.origin
       }
     })
-    this.checkIfLogged()
+    window.sessionStorage.removeItem('isLogged')
+    this.route.navigateByUrl('')
   }
 
 }
