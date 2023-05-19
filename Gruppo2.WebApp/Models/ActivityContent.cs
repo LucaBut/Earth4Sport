@@ -2,10 +2,11 @@
 {
     public class ActivityContent
     {
-        public Guid Id { get; set; }       
+        public Guid Id{ get; set; }
         public Guid? IdActivity { get; set; }
         public string? Position { get; set; }
         public string? PulseRate{ get; set; }
+        public string? Time { get; set; }
 
     }
 }

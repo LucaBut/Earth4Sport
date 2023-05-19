@@ -53,8 +53,8 @@
 
 <!-- CHART -->
 
-<div id="chart-demo">
-  <dx-chart [dataSource]="monthWeather" [customizePoint]="customizePoint">
+<!-- <div id="chart-demo">
+  <dx-chart [dataSource]="chartData" [customizePoint]="customizePoint">
     <dxo-title text="ActivityContents"></dxo-title>
     <dxo-size [height]="420"></dxo-size>
     <dxi-series argumentField="day" valueField="t" type="bar"></dxi-series>
@@ -65,6 +65,33 @@
     </dxi-value-axis>
     <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
   </dx-chart>
+</div> -->
+
+<div id="chart-demo">
+  <dx-chart
+    title="Activity Contents"
+    [dataSource]="chartData"
+  >
+    <dxi-series valueField="pulseRate" name="pulseRate"></dxi-series>
+    <dxo-common-series-settings
+      argumentField="dateIns"
+      [type]="types[0]"
+    >
+    </dxo-common-series-settings>
+    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+    </dxo-legend>
+  </dx-chart>
+  <!-- <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Series Type</span>
+      <dx-select-box [dataSource]="types" [(value)]="commonSeries.type">
+      </dx-select-box>
+    </div>
+  </div> -->
 </div>
 
 

@@ -1,4 +1,5 @@
-﻿using Gruppo2.WebApp.Models;
+﻿using Gruppo2.WebApp.ClassUtils;
+using Gruppo2.WebApp.Models;
 using Gruppo2.WebApp.Services;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
@@ -36,17 +37,32 @@ namespace Gruppo2.WebApp.Controllers
 
 
 
-        [HttpGet]
-        public Task Invoke()
+
+        [HttpGet("{idActivity}")]
+        public Task Invoke(string idActivity)
         {
             
-            Start();//per adesso simulatore qua per prova ma sul suo servizio
+            Start(idActivity);//per adesso simulatore qua per prova ma sul suo servizio
             return Task.CompletedTask;
         }
-        static void Start()
+
+
+
+
+        [HttpPost("AddActivityContentInflux")]
+        public async Task<bool> SendFromSimulator(DataFromSimulator dataFromSimulator)
+        {
+            await _InfluxDbService.Write(dataFromSimulator);
+            return true;
+        }
+
+
+
+
+        public async void Start(string idActivity)
         {
             bool moving = true;     // true quando sta avanzando, false quando torna indietro (andamento nella piscina)
-
+            int nPools = 0;
             string geoCoordinates = "";
             geoCoordinates = InitGeoCoordinates();
             Console.WriteLine($"Init coordinate: {geoCoordinates}");
@@ -68,7 +84,7 @@ namespace Gruppo2.WebApp.Controllers
             {
                 Thread.Sleep(10000);
 
-                ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving);
+                ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving, ref nPools);
 
                 if (pulseRate > 30 && pulseRate < 200)
                 {
@@ -80,7 +96,16 @@ namespace Gruppo2.WebApp.Controllers
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
                     ReturnToNormalPulseRate(ref pulseRate);
                 }
-            }
+
+                DataFromSimulator dataFromSimulator = new DataFromSimulator();
+                dataFromSimulator.PulseRate = pulseRate;
+                dataFromSimulator.GeoCoordinates = geoCoordinates;
+                dataFromSimulator.IdActivity = idActivity;
+                dataFromSimulator.NoPools = nPools;
+                await SendFromSimulator(dataFromSimulator);
+                
+
+            }   
         }
 
         #region GeographicCoordinates
@@ -100,7 +125,7 @@ namespace Gruppo2.WebApp.Controllers
         }
 
         static void ModifyGeoCoordinates(ref string geoCoordinates, int randLatLong, int minValMovement,
-                                         int maxValMovement, ref bool moving)
+                                          int maxValMovement, ref bool moving, ref int nPools)
         {
             int latitudeDecimals = 0, longitudeDecimals = 0, latitudeInt = 0, longitudeInt = 0;
             SplitCoordinates(geoCoordinates, ref latitudeInt, ref latitudeDecimals, ref longitudeInt, ref longitudeDecimals);
@@ -118,6 +143,7 @@ namespace Gruppo2.WebApp.Controllers
                     if ((latitudeDecimals + movement) > maxValMovement)
                     {
                         moving = false;     // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = (latitudeDecimals + movement) - maxValMovement;
                         latitudeDecimals = maxValMovement - diff;
@@ -133,6 +159,7 @@ namespace Gruppo2.WebApp.Controllers
                     if ((latitudeDecimals - movement) < minValMovement)
                     {
                         moving = true;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = minValMovement - (latitudeDecimals - movement);
                         latitudeDecimals = minValMovement + diff;
@@ -152,6 +179,7 @@ namespace Gruppo2.WebApp.Controllers
                     if ((longitudeDecimals + movement) > maxValMovement)
                     {
                         moving = false;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = (longitudeDecimals + movement) - maxValMovement;
                         longitudeDecimals = maxValMovement - diff;
@@ -167,6 +195,7 @@ namespace Gruppo2.WebApp.Controllers
                     if ((longitudeDecimals - movement) < minValMovement)
                     {
                         moving = true;      // l'atleta cambia direzione
+                        nPools += 1;
 
                         int diff = (longitudeDecimals - movement) - minValMovement;
                         longitudeDecimals = minValMovement - diff;
@@ -181,6 +210,7 @@ namespace Gruppo2.WebApp.Controllers
 
             geoCoordinates = ComponingStringCoordinates(latitudeInt, latitudeDecimals, longitudeInt, longitudeDecimals);
             Console.WriteLine($"Coordinate modificate: {geoCoordinates}");
+            Console.WriteLine($"Vasche fatte dall'inizio dell'allenamento: {nPools}");
         }
 
         static string ComponingStringCoordinates(int latitudeInt, int latitudeDecimals,

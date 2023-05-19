@@ -27,7 +27,15 @@ namespace Gruppo2.WebApp.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
         {
             List<User> users = new List<User>();
-            users = await _context.User.ToListAsync();
+            try
+            {
+                users = await _context.User.ToListAsync();
+            }
+            catch (Exception ex) 
+            {
+                Console.Write(ex.ToString());
+            }
+            //users = await _context.User.ToListAsync();
 
             List<UserDto> usersDto = new List<UserDto>();
             _mapper.Map(users, usersDto);

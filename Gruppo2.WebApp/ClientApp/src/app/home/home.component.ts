@@ -14,6 +14,7 @@ import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls:[ './home.component.scss']
 })
 export class HomeComponent {
   temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
@@ -34,6 +35,41 @@ export class HomeComponent {
 
   activityNameSelected: any
   deviceNameSelected: any
+
+  types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
+  populationData = 
+  [{
+    country: 'China',
+    y014: 233866959,
+    y1564: 1170914102,
+    y65: 171774113,
+  },
+  {
+    country: 'Russia',
+    y014: 24465156,
+    y1564: 96123777,
+    y65: 20412243,
+  }];
+  chartData = 
+  [
+  {
+    pulseRate: 150,
+    dateIns: '22/05/2023 01:05:22'
+  }, 
+  {
+    pulseRate: 172,
+    dateIns: '23/05/2023 01:05:22'
+  }, 
+  {
+    pulseRate: 96,
+    dateIns: '24/05/2023 01:05:22'
+  }, 
+  {
+    pulseRate: 80,
+    dateIns: '25/05/2023 01:05:22'
+  }
+]
+
 
   constructor(private http: HttpClient, public auth: AuthService, private route: Router){}
 
@@ -57,6 +93,7 @@ export class HomeComponent {
 
     this.getUser()
     this.checkIfLogged()
+    //this.startSimulator()
     this.getActivityContentsByIDActivity()
   }
 
@@ -133,7 +170,8 @@ export class HomeComponent {
 
   startSimulator()
   {
-    this.http.get(`${this.stringConnection}/simulator/StartOperation`).subscribe()
+    let idActivity = '0b48f4ed-7849-44eb-19bb-08db47ee099c'
+    this.http.get(`${this.stringConnection}/influx/` + idActivity).subscribe()
   }
   stopSimulator()
   {

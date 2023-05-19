@@ -7,6 +7,9 @@ using InfluxDB.Client.Core;
 using InfluxDB.Client.Core.Flux.Domain;
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Gruppo2.WebApp.Models.Dtos;
+using AutoMapper;
+using Gruppo2.WebApp.ClassUtils;
 
 namespace Gruppo2.WebApp
 {
@@ -16,17 +19,18 @@ namespace Gruppo2.WebApp
         private readonly string _bucket;
         private readonly string _organization;
         private readonly string _url;
-
-        public InfluxDBService(IConfiguration configuration)
+        private readonly IMapper _mapper;
+        public InfluxDBService(IConfiguration configuration, IMapper mapper)
         {
             _token = configuration.GetValue<string>("InfluxDB:Token");
             _bucket = configuration.GetValue<string>("InfluxDB:Bucket");
             _organization = configuration.GetValue<string>("InfluxDB:Organization");
             _url = configuration.GetValue<string>("InfluxDB:Url");
+            _mapper = mapper;
         }
 
 
-        public async Task<IEnumerable<FluxTable>> GetActivityContentsByIDActivity(Guid idActivity)
+        public async Task<IEnumerable<ActivityContentDto>> GetActivityContentsByIDActivity(Guid idActivity)
         {
             using var client = InfluxDBClientFactory.Create(_url, _token);//apri connessione a influxdb
             
@@ -38,9 +42,7 @@ namespace Gruppo2.WebApp
             //                   "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
 
 
-            QueryApi queryApi = client.GetQueryApi();
-            
-            
+            QueryApi queryApi = client.GetQueryApi();            
             List<FluxTable> tables = await queryApi.QueryAsync(query, _organization);
 
             //if (tables.Count() == 0)
@@ -52,6 +54,8 @@ namespace Gruppo2.WebApp
             client.Dispose();//per chiudere connessione
 
 
+            List<ActivityContent> activityContents = new List<ActivityContent>();
+
             //// Leggi i dati restituiti
             foreach (FluxTable table in tables)
             {
@@ -62,40 +66,61 @@ namespace Gruppo2.WebApp
                 {
                     // Leggi i campi e i valori del record
                     Dictionary<string, object> values = record.Values;
+                    ActivityContent activityContent = new ActivityContent();
 
-                    foreach (KeyValuePair<string, object> field in values)
-                    {
-                        string fieldName = field.Key;
-                        object fieldValue = field.Value;
+                    //per trovare l'idActivity 
+                    string idActivityStr = values.First(x => x.Key == "idActivity").Value.ToString();
+                    Guid idActivitytoInsert = Guid.Parse(idActivityStr);
+                    activityContent.IdActivity = idActivitytoInsert;
 
-                        // Gestisci i dati come necessario
-                        Console.WriteLine(fieldName + ": " + fieldValue);
-                    }
+                    //per trovare il pulseRate
+                    //string pulseRateStr = values.First(x => x.Key == "pulseRate").Value.ToString();
+                    //activityContent.PulseRate = pulseRateStr;
+
+                    //per trovare il position
+                    string position = values.First(x => x.Key == "_value").Value.ToString();
+                    activityContent.Position = position;
+
+
+                    string time = values.First(x => x.Key == "_time").Value.ToString();
+                    DateTime dateTime = Convert.ToDateTime(time);
+                    string timeToInsert = dateTime.ToString("dd/MM/yyyy");
+                    activityContent.Time = timeToInsert;
+
+
+
+                    //aggiungo alla lista 
+                    activityContents.Add(activityContent);
+
                 }
             }
 
-            return tables;
+            List<ActivityContentDto> listDtos = new List<ActivityContentDto>();
+
+            foreach(ActivityContent content in activityContents)
+            {
+                ActivityContentDto activityContentDto = new ActivityContentDto();
+                _mapper.Map(content, activityContentDto);
+                listDtos.Add(activityContentDto);
+            }
+
+            return listDtos;
 
         }
 
-        public void Write(string record)
+        public async Task<bool> Write(DataFromSimulator dataFromSimulator)
         {
             using var client = InfluxDBClientFactory.Create(_url, _token);//apri connessione a influxdb
-
-
-            string[] splits = record.Split(';');
-
-            string idActivity = splits[0];
-            string position = splits[1];
-            int pulseRate = Convert.ToInt32(splits[2]);   
+                      
              
-            var mem = new Mem { IdActivity = idActivity, Position = position, PulseRate = pulseRate, Time = DateTime.UtcNow };
+            var mem = new Mem { IdActivity = dataFromSimulator.IdActivity, Position = dataFromSimulator.GeoCoordinates, PulseRate = dataFromSimulator.PulseRate, Time = DateTime.UtcNow };
             using (var writeApi = client.GetWriteApi())
             {
                 writeApi.WriteMeasurement(mem, WritePrecision.Ns, _bucket, _organization);
             }
 
             client.Dispose();//per chiudere connessione
+            return true;
         }
         static void Start()
         {
@@ -369,7 +394,7 @@ namespace Gruppo2.WebApp
         {
             [Column("idActivity", IsTag = true)] public string IdActivity { get; set; }
             [Column("position")] public string? Position { get; set; }
-            [Column("pulseRate")] public int? PulseRate { get; set; }
+            [Column("pulseRate")] public int? PulseRate { get; set; }            
             [Column(IsTimestamp = true)] public DateTime Time { get; set; }
         }
 
