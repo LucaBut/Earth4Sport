@@ -30,10 +30,10 @@ namespace Gruppo2.WebApp.Controllers
         }
 
 
-        [HttpGet("GetDevicesbyIDUser/{idUserStr}")]
-        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetDevicesbyIDUser(string idUserStr)
+        [HttpGet("GetDevicesbyIDUser/{id}")]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetDevicesbyIDUser(string id)
         {
-            Guid idUser = Guid.Parse(idUserStr);
+            Guid idUser = Guid.Parse(id);
 
             List<Device> devices = new List<Device>();
 

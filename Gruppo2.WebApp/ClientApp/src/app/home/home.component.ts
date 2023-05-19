@@ -30,8 +30,9 @@ export class HomeComponent {
   users: UserModel[] = [];
   user: UserModel = <UserModel>{};
   isLogged: Boolean = false;
-  allDevices: DeviceModel[] =  []
+  devices: DeviceModel[] =  []
   allDevicesNames: any[] = []
+  idUser = this.user.id;
 
   allActivities: ActivityModel[] = []
   allActivitiesNames: any[] = []
@@ -60,10 +61,6 @@ export class HomeComponent {
     this.checkIfLogged()
     // this.getUser()
     // this.getActivityContentsByIDActivity()
-  }
-
-  ngAfterViewInit(){
-
   }
 
   getUser(mail :any){
@@ -109,41 +106,41 @@ export class HomeComponent {
   // }
 
 
-  getDevicesbyIDUser(idUserStr: any)
-  {
-    this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices =>
-      {
-        if(devices != null)
-        {
-          this.allDevices = devices
-          this.getActivitiesByIDDevice(this.allDevices[0].id)
-          this.allDevices.forEach(x =>
-            {
-              this.allDevicesNames.push(x.name)
-            })
-            this.deviceNameSelected = this.allDevicesNames[0]
-        }
-      })
-  }
+  // getDevicesbyIDUser(idUserStr: any)
+  // {
+  //   this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices =>
+  //     {
+  //       if(devices != null)
+  //       {
+  //         this.allDevices = devices
+  //         this.getActivitiesByIDDevice(this.allDevices[0].id)
+  //         this.allDevices.forEach(x =>
+  //           {
+  //             this.allDevicesNames.push(x.name)
+  //           })
+  //           this.deviceNameSelected = this.allDevicesNames[0]
+  //       }
+  //     })
+  // }
 
-  getActivitiesByIDDevice(idDeviceStr: any)
-  {
-    this.allActivities = []
-    this.allActivitiesNames = []
-    this.activityNameSelected = null
-    this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
-      {
-        if(activities != null)
-        {
-          this.allActivities = activities
-          this.allActivities.forEach((x: any, index: any) =>
-            {
-              this.allActivitiesNames.push("Allenamento: " + x.id)
-            })
-            this.activityNameSelected = this.allActivitiesNames[0]
-        }
-      })
-  }
+  // getActivitiesByIDDevice(idDeviceStr: any)
+  // {
+  //   this.allActivities = []
+  //   this.allActivitiesNames = []
+  //   this.activityNameSelected = null
+  //   this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
+  //     {
+  //       if(activities != null)
+  //       {
+  //         this.allActivities = activities
+  //         this.allActivities.forEach((x: any, index: any) =>
+  //           {
+  //             this.allActivitiesNames.push("Allenamento: " + x.id)
+  //           })
+  //           this.activityNameSelected = this.allActivitiesNames[0]
+  //       }
+  //     })
+  // }
 
 
 
@@ -173,9 +170,9 @@ export class HomeComponent {
 
   changeDevice(event: any)
   {
-    console.log(event)
-    let idDevice = this.allDevices.find(x => x.name == event)?.id.toString()
-    this.getActivitiesByIDDevice(idDevice)
+    // console.log(event)
+    // let idDevice = this.allDevices.find(x => x.name == event)?.id.toString()
+    // this.getActivitiesByIDDevice(idDevice)
   }
 
 
