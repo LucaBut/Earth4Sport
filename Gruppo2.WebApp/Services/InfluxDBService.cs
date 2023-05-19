@@ -56,45 +56,65 @@ namespace Gruppo2.WebApp
 
             List<ActivityContent> activityContents = new List<ActivityContent>();
 
+
+
+            ////firstTable
+            //FluxTable firstTable = new FluxTable();
+            //firstTable = tables[0];
+
+            ////secondTable
+            //FluxTable secondTable = new FluxTable();
+            //secondTable = tables[1];
+
+
+
+            //List<FluxRecord> recordsFirstTable = new List<FluxRecord>();
+            //for(int i = 0; i < firstTable.Records.Count(); i++)
+            //{
+            //    ActivityContent activityContentSelected = new ActivityContent();
+            //    var prova = firstTable.Records[i].GetField();
+            //}
+
+            int i = 0;
+            FluxTable firstTable = new FluxTable();
+            firstTable = tables[0];
             //// Leggi i dati restituiti
-            foreach (FluxTable table in tables)
-            {
+           
                 // Leggi le righe dei risultati
-                List<FluxRecord> records = table.Records;
+            List<FluxRecord> records = firstTable.Records;
 
-                foreach (FluxRecord record in records)
-                {
-                    // Leggi i campi e i valori del record
-                    Dictionary<string, object> values = record.Values;
-                    ActivityContent activityContent = new ActivityContent();
+            foreach (FluxRecord record in records)
+            {
+                // Leggi i campi e i valori del record
+                Dictionary<string, object> values = record.Values;
+                ActivityContent activityContent = new ActivityContent();
 
-                    //per trovare l'idActivity 
-                    string idActivityStr = values.First(x => x.Key == "idActivity").Value.ToString();
-                    Guid idActivitytoInsert = Guid.Parse(idActivityStr);
-                    activityContent.IdActivity = idActivitytoInsert;
+                //per trovare l'idActivity 
+                string idActivityStr = values.First(x => x.Key == "idActivity").Value.ToString();
+                Guid idActivitytoInsert = Guid.Parse(idActivityStr);
+                activityContent.IdActivity = idActivitytoInsert;
 
-                    //per trovare il pulseRate
-                    //string pulseRateStr = values.First(x => x.Key == "pulseRate").Value.ToString();
-                    //activityContent.PulseRate = pulseRateStr;
+                //per trovare il pulseRate
+                string pulseRateStr = tables[1].Records[i].GetValue().ToString();
+                activityContent.PulseRate = pulseRateStr;
 
-                    //per trovare il position
-                    string position = values.First(x => x.Key == "_value").Value.ToString();
-                    activityContent.Position = position;
-
-
-                    string time = values.First(x => x.Key == "_time").Value.ToString();
-                    DateTime dateTime = Convert.ToDateTime(time);
-                    string timeToInsert = dateTime.ToString("dd/MM/yyyy");
-                    activityContent.Time = timeToInsert;
+                //per trovare il position
+                string position = values.First(x => x.Key == "_value").Value.ToString();
+                activityContent.Position = position;
 
 
+                string time = values.First(x => x.Key == "_time").Value.ToString();
+                DateTime dateTime = Convert.ToDateTime(time);
+                string timeToInsert = dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+                activityContent.Time = timeToInsert;
 
-                    //aggiungo alla lista 
-                    activityContents.Add(activityContent);
 
-                }
+
+                //aggiungo alla lista 
+                activityContents.Add(activityContent);
+                ++i;
             }
-
+           
             List<ActivityContentDto> listDtos = new List<ActivityContentDto>();
 
             foreach(ActivityContent content in activityContents)

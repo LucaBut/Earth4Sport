@@ -39,6 +39,10 @@ export class HomeComponent {
 
   activityNameSelected: any
   deviceNameSelected: any
+  activityContents: any
+
+
+  types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
 
   constructor(private http: HttpClient, public auth: AuthService, private route: Router, private userService: UserService){}
 
@@ -60,7 +64,8 @@ export class HomeComponent {
 
     this.checkIfLogged()
     // this.getUser()
-    // this.getActivityContentsByIDActivity()
+   // this.startSimulator()
+    this.getActivityContentsByIDActivity()
   }
 
   getUser(mail :any){
@@ -164,7 +169,11 @@ export class HomeComponent {
 
   getActivityContentsByIDActivity()
   {
-    this.http.get(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe()
+    this.http.get<any[]>(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe(data => 
+      {
+        this.activityContents = data 
+      }
+    )
   }
 
 
@@ -179,8 +188,6 @@ export class HomeComponent {
   changeActivity(event: any)
   {
     console.log(event)
-
-    //getActivityContents
   }
 
   //per grafico
