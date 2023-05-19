@@ -8,13 +8,23 @@ import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
 import { UserService } from '../services/user.service';
 import { LoginComponent } from '../login/login.component';
+import DataSource from 'devextreme/data/data_source';
+
+import CustomStore from 'devextreme/data/custom_store';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
 
+  palette: string[] = ['#c3a2cc', '#b7b5e0', '#e48cba'];
+
+  paletteIndex = 0;
+
+  monthWeather: any = {};
   stringConnection: string = "https://localhost:7042";
   users: UserModel[] = [];
   user: UserModel = <UserModel>{};
@@ -33,6 +43,24 @@ export class HomeComponent {
   userEmail: string | undefined = "";
 
   ngOnInit(){
+
+
+    //per grafico
+    this.monthWeather = new DataSource({
+      store: new CustomStore({
+        load: () => lastValueFrom(this.http.get('data/monthWeather.json'))
+          .catch((error) => { throw 'Data Loading Error'; }),
+        loadMode: 'raw',
+      }),
+      filter: ['t', '>', '2'],
+      paginate: false,
+    });
+
+
+
+
+
+    this.getUser()
     this.checkIfLogged()
     // this.getUser()
     // this.getActivityContentsByIDActivity()
@@ -160,4 +188,28 @@ export class HomeComponent {
 
     //getActivityContents
   }
+
+  //per grafico
+  customizePoint = () => {
+    const color = this.palette[this.paletteIndex];
+    this.paletteIndex = this.paletteIndex === 2 ? 0 : this.paletteIndex + 1;
+
+    return {
+      color,
+    };
+  };
+
+  customizeText(arg: any) {
+    return `${arg.valueText}&#176C`;
+  }
+
+  onValueChanged(data: any) {
+    this.monthWeather.filter(['t', '>', data.value]);
+    this.monthWeather.load();
+  }
+
+
+
+
+
 }

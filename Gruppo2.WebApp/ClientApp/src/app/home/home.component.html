@@ -51,5 +51,21 @@
 </div>
 
 
+<!-- CHART -->
+
+<div id="chart-demo">
+  <dx-chart [dataSource]="monthWeather" [customizePoint]="customizePoint">
+    <dxo-title text="ActivityContents"></dxo-title>
+    <dxo-size [height]="420"></dxo-size>
+    <dxi-series argumentField="day" valueField="t" type="bar"></dxi-series>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-value-axis>
+      <dxo-label [customizeText]="customizeText"></dxo-label>
+    </dxi-value-axis>
+    <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
+  </dx-chart>
+</div>
+
 
 

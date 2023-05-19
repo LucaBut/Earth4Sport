@@ -6,6 +6,7 @@ using InfluxDB.Client.Writes;
 using InfluxDB.Client.Core;
 using InfluxDB.Client.Core.Flux.Domain;
 using System.Net.Sockets;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Gruppo2.WebApp
 {
@@ -33,14 +34,21 @@ namespace Gruppo2.WebApp
 
 
 
-            //string queryFiltered = "from(bucket: \"" + _bucket + "\") |> range(start: -1h) " +
+            //string query = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
             //                   "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
 
-            
+
             QueryApi queryApi = client.GetQueryApi();
             
             
             List<FluxTable> tables = await queryApi.QueryAsync(query, _organization);
+
+            //if (tables.Count() == 0)
+            //    return NoContent();
+
+
+
+
             client.Dispose();//per chiudere connessione
 
 
