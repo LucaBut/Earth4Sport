@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Device } from 'devextreme/core/devices';
 import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
-import { UserService } from '../services/user.service';
+import { homeService } from '../services/home.service';
 import { LoginComponent } from '../login/login.component';
 import DataSource from 'devextreme/data/data_source';
 
@@ -44,32 +44,20 @@ export class HomeComponent {
 
   types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
 
-  constructor(private http: HttpClient, public auth: AuthService, private route: Router, private userService: UserService){}
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router, public homeService: homeService){}
 
   userEmail: string | undefined = "";
 
   ngOnInit(){
 
-
-    //per grafico
-    this.monthWeather = new DataSource({
-      store: new CustomStore({
-        load: () => lastValueFrom(this.http.get('data/monthWeather.json'))
-          .catch((error) => { throw 'Data Loading Error'; }),
-        loadMode: 'raw',
-      }),
-      filter: ['t', '>', '2'],
-      paginate: false,
-    });
-
-    this.checkIfLogged()
+   this.checkIfLogged()
     // this.getUser()
    // this.startSimulator()
-    this.getActivityContentsByIDActivity()
+   this.getActivityContentsByIDActivity()
   }
 
   getUser(mail :any){
-    this.userService
+    this.homeService
       .getUser(mail)
   }
 
@@ -108,24 +96,6 @@ export class HomeComponent {
   //     );
 
   //     console.log(window.location.origin)
-  // }
-
-
-  // getDevicesbyIDUser(idUserStr: any)
-  // {
-  //   this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices =>
-  //     {
-  //       if(devices != null)
-  //       {
-  //         this.allDevices = devices
-  //         this.getActivitiesByIDDevice(this.allDevices[0].id)
-  //         this.allDevices.forEach(x =>
-  //           {
-  //             this.allDevicesNames.push(x.name)
-  //           })
-  //           this.deviceNameSelected = this.allDevicesNames[0]
-  //       }
-  //     })
   // }
 
   // getActivitiesByIDDevice(idDeviceStr: any)

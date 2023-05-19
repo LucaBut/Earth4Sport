@@ -1,41 +1,12 @@
-<!-- <div *ngIf="isLogged">
-
-  <dx-data-grid
-    [dataSource]="users"
-    [allowColumnReordering]="true"
-    [allowColumnResizing]="true"
-    [columnAutoWidth]="true"
-    [hoverStateEnabled]="true"
-    [showBorders]="true"
-    [rowAlternationEnabled]="true"
-    (onRowInserted)="addUser($event)"
-  >
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-search-panel [visible]="true"></dxo-search-panel>
-    <dxi-column dataField="id" [visible]="false"></dxi-column>
-    <dxi-column dataField="username"></dxi-column>
-    <dxi-column dataField="name"></dxi-column>
-    <dxi-column dataField="surname"></dxi-column>
-    <dxi-column dataField="birthDate" dataType="date"></dxi-column>
-    <dxi-column dataField="email"></dxi-column>
-    <dxi-column dataField="password" [visible]="false"></dxi-column>
-    <dxo-editing mode="form" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
-
-    </dxo-editing>
-  </dx-data-grid>
-</div> -->
-
-
-
 <div style="display: flex;">
   <!-- SELECT DEVICE -->
   <div class="dx-fieldset">
     <div class="dx-field">
       <div class="dx-field-label">Devices</div>
       <div class="dx-field-value">
-        <dx-select-box [dataSource]="allDevicesNames" [value]="deviceNameSelected" (selectedItemChange)="changeDevice($event)"></dx-select-box>
+        <dx-select-box [dataSource]="homeService.nameDevices" [value]="homeService.deviceSelectedName" (selectedItemChange)="changeDevice($event)"></dx-select-box>
       </div>
-    </div>
+    </div> 
   </div>
 
   <!-- SELECT ACTIVITIES -->
@@ -43,31 +14,15 @@
     <div class="dx-field"style="width: 400px;">
       <div class="dx-field-label" >Activities</div>
       <div class="dx-field-value" >
-        <dx-select-box [dataSource]="allActivitiesNames" [value]="activityNameSelected" (selectedItemChange)="changeActivity($event)"></dx-select-box>
+        <dx-select-box [dataSource]="homeService.allActivitiesNames" [value]="homeService.activityNameSelected" (selectedItemChange)="changeActivity($event)"></dx-select-box>
       </div>
     </div>
   </div>
 
 </div>
 
-
-<!-- CHART -->
-
-<!-- <div id="chart-demo">
-  <dx-chart [dataSource]="chartData" [customizePoint]="customizePoint">
-    <dxo-title text="ActivityContents"></dxo-title>
-    <dxo-size [height]="420"></dxo-size>
-    <dxi-series argumentField="day" valueField="t" type="bar"></dxi-series>
-    <dxo-legend [visible]="false"></dxo-legend>
-    <dxo-export [enabled]="true"></dxo-export>
-    <dxi-value-axis>
-      <dxo-label [customizeText]="customizeText"></dxo-label>
-    </dxi-value-axis>
-    <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
-  </dx-chart>
-</div> -->
-
-<!-- <div id="chart-demo">
+<!-- GRAFICO ACTIVITY CONTENT -->
+<div id="chart-demo">
   <dx-chart
     title="Activity Contents"
     [dataSource]="activityContents"

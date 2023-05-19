@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
 import { UserModel } from '../models/user-model';
-import { UserService } from '../services/user.service';
+import { homeService } from '../services/home.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(
     public auth: AuthService,
     private route: Router,
-    private service: UserService
+    private service: homeService
   ) {}
 
   ngOnInit(): void {
