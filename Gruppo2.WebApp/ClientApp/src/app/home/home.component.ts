@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { Device } from 'devextreme/core/devices';
 import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
+import { UserService } from '../services/user.service';
+import { LoginComponent } from '../login/login.component';
 import DataSource from 'devextreme/data/data_source';
 
 import CustomStore from 'devextreme/data/custom_store';
@@ -26,6 +28,7 @@ export class HomeComponent {
   monthWeather: any = {};
   stringConnection: string = "https://localhost:7042";
   users: UserModel[] = [];
+  user: UserModel = <UserModel>{};
   isLogged: Boolean = false;
   allDevices: DeviceModel[] =  []
   allDevicesNames: any[] = []
@@ -36,42 +39,9 @@ export class HomeComponent {
   activityNameSelected: any
   deviceNameSelected: any
 
-  types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
-  populationData = 
-  [{
-    country: 'China',
-    y014: 233866959,
-    y1564: 1170914102,
-    y65: 171774113,
-  },
-  {
-    country: 'Russia',
-    y014: 24465156,
-    y1564: 96123777,
-    y65: 20412243,
-  }];
-  chartData = 
-  [
-  {
-    pulseRate: 150,
-    dateIns: '22/05/2023 01:05:22'
-  }, 
-  {
-    pulseRate: 172,
-    dateIns: '23/05/2023 01:05:22'
-  }, 
-  {
-    pulseRate: 96,
-    dateIns: '24/05/2023 01:05:22'
-  }, 
-  {
-    pulseRate: 80,
-    dateIns: '25/05/2023 01:05:22'
-  }
-]
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router, private userService: UserService){}
 
-
-  constructor(private http: HttpClient, public auth: AuthService, private route: Router){}
+  userEmail: string | undefined = "";
 
   ngOnInit(){
 
@@ -93,45 +63,66 @@ export class HomeComponent {
 
     this.getUser()
     this.checkIfLogged()
-    //this.startSimulator()
-    this.getActivityContentsByIDActivity()
+    // this.getUser()
+    // this.getActivityContentsByIDActivity()
+  }
+
+  ngAfterViewInit(){
+
+  }
+
+  getUser(mail :any){
+    this.userService
+      .getUser(mail)
   }
 
   checkIfLogged() {
     if (window.sessionStorage.getItem('isLogged')) {
       this.isLogged = true;
-      
+      this.getEmail()
     } else {
       this.isLogged = false;
       this.route.navigateByUrl('')
     }
   }
 
-   getUser(){
-    this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
-      {
-        this.users = data;
-        let idUser = '0b48f4ed-7849-44eb-19bb-08db47ee099c'
-        this.getDevicesbyIDUser(idUser)
-      },error =>
-      {
-        console.log(error)
-      }
-      );
+  getEmail(){
+    var mail: any;
+    this.auth.user$.forEach((element) => {
+      console.log(element?.email)
+      mail = element?.email
+    })
+    setTimeout(() => {
+      this.getUser(mail)
+    }, 1000)
 
-      console.log(window.location.origin)
   }
+
+  //  getUser(){
+  //   this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
+  //     {
+  //       this.users = data;
+  //       let idUser = '0b48f4ed-7849-44eb-19bb-08db47ee099c'
+  //       this.getDevicesbyIDUser(idUser)
+  //     },error =>
+  //     {
+  //       console.log(error)
+  //     }
+  //     );
+
+  //     console.log(window.location.origin)
+  // }
 
 
   getDevicesbyIDUser(idUserStr: any)
   {
-    this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices => 
+    this.http.get<DeviceModel[]>(`${this.stringConnection}/device/GetDevicesbyIDUser/` + idUserStr).subscribe(devices =>
       {
         if(devices != null)
         {
           this.allDevices = devices
           this.getActivitiesByIDDevice(this.allDevices[0].id)
-          this.allDevices.forEach(x => 
+          this.allDevices.forEach(x =>
             {
               this.allDevicesNames.push(x.name)
             })
@@ -145,12 +136,12 @@ export class HomeComponent {
     this.allActivities = []
     this.allActivitiesNames = []
     this.activityNameSelected = null
-    this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities => 
+    this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
       {
         if(activities != null)
         {
-          this.allActivities = activities          
-          this.allActivities.forEach((x: any, index: any) => 
+          this.allActivities = activities
+          this.allActivities.forEach((x: any, index: any) =>
             {
               this.allActivitiesNames.push("Allenamento: " + x.id)
             })
@@ -159,7 +150,7 @@ export class HomeComponent {
       })
   }
 
-  
+
 
 
 
@@ -189,7 +180,7 @@ export class HomeComponent {
   {
     console.log(event)
     let idDevice = this.allDevices.find(x => x.name == event)?.id.toString()
-    this.getActivitiesByIDDevice(idDevice) 
+    this.getActivitiesByIDDevice(idDevice)
   }
 
 

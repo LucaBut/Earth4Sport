@@ -28,7 +28,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     HttpClientModule,
     FormsModule,
     DxDataGridModule,
-    DxFormModule,    
+    DxFormModule,
     DxSelectBoxModule,
     DxButtonModule,
     DxChartModule,
