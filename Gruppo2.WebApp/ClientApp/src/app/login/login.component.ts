@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
+import { UserModel } from '../models/user-model';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -9,10 +11,18 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   @Input() isLogged: boolean = false;
+  users: UserModel[] = [];
 
-  constructor(public auth: AuthService, private route: Router) {}
+  userEmail: string | undefined = '';
+
+  constructor(
+    public auth: AuthService,
+    private route: Router,
+    private service: UserService
+  ) {}
 
   ngOnInit(): void {
+    // this.service.getUser();
     this.checkIfLogged();
   }
 
@@ -21,7 +31,7 @@ export class LoginComponent implements OnInit {
       this.isLogged = true;
     } else {
       this.isLogged = false;
-      this.handleLoginSubmit()
+      this.handleLoginSubmit();
     }
   }
 
@@ -29,13 +39,13 @@ export class LoginComponent implements OnInit {
     text: 'Login',
     onclick: () => {
       this.handleLoginSubmit();
-    }
+    },
   };
 
   handleLoginSubmit() {
     window.sessionStorage.setItem('isLogged', 'true');
     this.auth.loginWithRedirect({
-      appState: {target: '/home'}
+      appState: { target: `/home` },
     });
     this.checkIfLogged();
   }

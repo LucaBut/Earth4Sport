@@ -34,5 +34,21 @@ namespace Gruppo2.WebApp.Controllers
             Console.WriteLine(users);
             return usersDto;
         }
+
+        [HttpGet("{mail}")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUserByEmailAsync(string mail)
+        {
+            List<User> user = new List<User>();
+            user = await _context.User.Where(_ => _.Email == mail).ToListAsync();
+
+            List<UserDto> userDtos = new List<UserDto>();
+            foreach(User users in user) {
+                UserDto userDto = new UserDto();
+                _mapper.Map(users, userDto);
+                userDtos.Add(userDto);
+            }
+
+            return userDtos;
+        }
     }
 }
