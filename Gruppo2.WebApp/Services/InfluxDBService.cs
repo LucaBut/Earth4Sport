@@ -105,14 +105,14 @@ namespace Gruppo2.WebApp
 
                 string time = values.First(x => x.Key == "_time").Value.ToString();
                 DateTime dateTime = Convert.ToDateTime(time);
-                string timeToInsert = dateTime.ToString("dd/MM/yyyy");
+                string timeToInsert = dateTime.ToString("dd/MM/yyyy HH:mm:ss");
                 activityContent.Time = timeToInsert;
 
 
 
                 //aggiungo alla lista 
                 activityContents.Add(activityContent);
-
+                ++i;
             }
            
             List<ActivityContentDto> listDtos = new List<ActivityContentDto>();

@@ -1,5 +1,6 @@
 ﻿using Gruppo2.WebApp.ClassUtils;
 using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Models.Dtos;
 using Gruppo2.WebApp.Services;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
@@ -27,11 +28,10 @@ namespace Gruppo2.WebApp.Controllers
 
 
         [HttpGet("GetActivitiesContentbyIDActivity")]//per leggere le tabelle di influx filtrate per idActivity
-        public async Task<IEnumerable<FluxTable>> GetActivitiesContentbyIDActivity()
+        public async Task<IEnumerable<ActivityContentDto>> GetActivitiesContentbyIDActivity()
         {
             Guid idActivity = new Guid();//arriva diverso in base alla activity selezionata 
-            List<FluxTable> fluxTables = (List<FluxTable>)await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);
-            return fluxTables;
+            return await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);            
         }
 
 
