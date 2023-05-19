@@ -56,11 +56,6 @@ export class HomeComponent {
       paginate: false,
     });
 
-
-
-
-
-    this.getUser()
     this.checkIfLogged()
     // this.getUser()
     // this.getActivityContentsByIDActivity()
