@@ -27,10 +27,10 @@ namespace Gruppo2.WebApp.Controllers
         
 
 
-        [HttpGet("GetActivitiesContentbyIDActivity")]//per leggere le tabelle di influx filtrate per idActivity
-        public async Task<IEnumerable<ActivityContentDto>> GetActivitiesContentbyIDActivity()
+        [HttpGet("GetActivitiesContentbyIDActivity/{idActivityStr}")]//per leggere le tabelle di influx filtrate per idActivity
+        public async Task<IEnumerable<ActivityContentDto>> GetActivitiesContentbyIDActivity(string idActivityStr)
         {
-            Guid idActivity = new Guid();//arriva diverso in base alla activity selezionata 
+            Guid idActivity = Guid.Parse(idActivityStr);
             return await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);            
         }
 

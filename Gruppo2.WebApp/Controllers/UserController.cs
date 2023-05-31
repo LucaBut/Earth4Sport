@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Gruppo2.WebApp.Controllers
 {
@@ -43,20 +44,22 @@ namespace Gruppo2.WebApp.Controllers
             return usersDto;
         }
 
-        [HttpGet("{mail}")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUserByEmailAsync(string mail)
+        [HttpGet("GetUserByMail/{mail}")]
+        public async Task<ActionResult<UserDto>> GetUserByEmailAsync(string mail)
         {
-            List<User> user = new List<User>();
-            user = await _context.User.Where(_ => _.Email == mail).ToListAsync();
-
-            List<UserDto> userDtos = new List<UserDto>();
-            foreach(User users in user) {
-                UserDto userDto = new UserDto();
-                _mapper.Map(users, userDto);
-                userDtos.Add(userDto);
+            User user = new User();
+            try
+            {
+                user = await _context.User.Where(x => x.Email == mail).FirstAsync();
+                UserDto dto = new UserDto();
+                _mapper.Map(user, dto);
+                return dto;
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
             }
 
-            return userDtos;
         }
     }
 }

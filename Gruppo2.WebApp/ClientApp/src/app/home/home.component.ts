@@ -48,39 +48,49 @@ export class HomeComponent {
 
   userEmail: string | undefined = "";
 
-  ngOnInit(){
+  checkMail: boolean = false
 
-   this.checkIfLogged()
-    // this.getUser()
-   // this.startSimulator()
-   this.getActivityContentsByIDActivity()
+  intervalMail: any
+
+  ngOnInit(){
+ //   this.startSimulator()
+   this.checkIfLogged()   
   }
 
   getUser(mail :any){
-    this.homeService
-      .getUser(mail)
+    this.homeService.getUser(mail)
+    this.homeService.user
   }
+
+
 
   checkIfLogged() {
     if (window.sessionStorage.getItem('isLogged')) {
       this.isLogged = true;
-      this.getEmail()
+      this.refreshEmail()
     } else {
       this.isLogged = false;
       this.route.navigateByUrl('')
     }
   }
 
-  getEmail(){
+  refreshEmail()
+  {
+    this.intervalMail = setInterval(() => this.getEmail(), 3000)
+  }
+
+
+  getEmail()
+  {
     var mail: any;
     this.auth.user$.forEach((element) => {
-      console.log(element?.email)
-      mail = element?.email
+      if(element != null)
+      {
+        clearInterval(this.intervalMail)
+        mail = element?.email
+        this.getUser(mail)
+      }       
     })
-    setTimeout(() => {
-      this.getUser(mail)
-    }, 1000)
-
   }
 
   //  getUser(){
@@ -128,7 +138,7 @@ export class HomeComponent {
 
   startSimulator()
   {
-    let idActivity = '0b48f4ed-7849-44eb-19bb-08db47ee099c'
+    let idActivity = '0b48f4ed-7849-4455-19bb-08db47ee099d'
     this.http.get(`${this.stringConnection}/influx/` + idActivity).subscribe()
   }
   stopSimulator()
@@ -137,14 +147,7 @@ export class HomeComponent {
   }
 
 
-  getActivityContentsByIDActivity()
-  {
-    this.http.get<any[]>(`${this.stringConnection}/influx/GetActivitiesContentbyIDActivity`).subscribe(data => 
-      {
-        this.activityContents = data 
-      }
-    )
-  }
+
 
 
   changeDevice(event: any)

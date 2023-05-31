@@ -25,7 +25,7 @@
 <div id="chart-demo">
   <dx-chart
     title="Activity Contents"
-    [dataSource]="activityContents"
+    [dataSource]="homeService.activityContents"
   >
     <dxi-series valueField="pulseRate" name="pulseRate"></dxi-series>
     <dxo-common-series-settings

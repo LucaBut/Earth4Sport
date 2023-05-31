@@ -11,35 +11,39 @@ export class homeService {
 
   users: UserModel[] = [];
   devices: DeviceModel[] = [];
-  user: UserModel = <UserModel>{}
+  public user: UserModel = <UserModel>{}
   public nameDevices: any[] = []
   public deviceSelectedName: any | null = ''
   allActivities: any[] = []
   allActivitiesNames: any[] = []
   activityNameSelected: any
+  activityContents: any[] = []
 
   constructor(private http: HttpClient) { }
 
   getUser(mail: any){
     this.http
-      .get<UserModel>(`https://localhost:7042/user/${mail}`)
+      .get<UserModel>(`https://localhost:7042/user/GetUserByMail/${mail}`)
       .subscribe(result => {
-        this.user = result
-        this.getDevices(result);
+        if(result != null)
+        {
+          this.user = result
+          this.getDevices(result);
+        }        
       })
 
   }
 
   getDevices(users: any)
   {
-    let id = users[0].id
+    let id = users.id
     this.devices = []
     this.nameDevices = []
     this.deviceSelectedName = ''
     this.http
       .get<DeviceModel[]>(`https://localhost:7042/device/GetDevicesbyIDUser/${id}`)
       .subscribe(result => {
-        if(this.devices != null)
+        if(result != null)
         {
           this.devices = result;
           this.devices.forEach(x => 
@@ -57,7 +61,7 @@ export class homeService {
   getActivitiesbyIDDevice(nameDevice: string)
   {
     let idDeviceStr = this.devices.find(x => x.name == nameDevice)?.id.toString()
-    this.http.get<ActivityModel[]>(`https://localhost:7042/device/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
+    this.http.get<ActivityModel[]>(`https://localhost:7042/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
     {
       if(activities != null)
       {
@@ -67,8 +71,19 @@ export class homeService {
             this.allActivitiesNames.push("Allenamento: " + x.id)
           })
           this.activityNameSelected = this.allActivitiesNames[0]
+          let idactivity = this.allActivities[0].id.toString()
+          this.getActivityContentsByIDActivity(idactivity)
       }
     })
+  }
+
+  getActivityContentsByIDActivity(idActivityStr: any)
+  {
+    this.http.get<any[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data => 
+      {
+        this.activityContents = data 
+      }
+    )
   }
 
 }

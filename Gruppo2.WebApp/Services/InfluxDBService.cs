@@ -33,13 +33,13 @@ namespace Gruppo2.WebApp
         public async Task<IEnumerable<ActivityContentDto>> GetActivityContentsByIDActivity(Guid idActivity)
         {
             using var client = InfluxDBClientFactory.Create(_url, _token);//apri connessione a influxdb
-            
-            string query = "from(bucket: \"" + _bucket + "\"" + ") |> range(start: 0)"; // Esempio di query per ottenere i dati degli ultimi 60 minuti
+
+            //string query = "from(bucket: \"" + _bucket + "\"" + ") |>filter(fn: (r) => r[\"_measurement\"] == “idActivity”) |> range(start: 0)"; // Esempio di query per ottenere i dati degli ultimi 60 minuti
 
 
 
-            //string query = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
-            //                   "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
+            string query = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
+                               "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
 
 
             QueryApi queryApi = client.GetQueryApi();            
