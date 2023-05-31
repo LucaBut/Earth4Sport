@@ -58,8 +58,11 @@ export class homeService {
   }
 
 
-  getActivitiesbyIDDevice(nameDevice: string)
+  getActivitiesbyIDDevice(nameDevice: any)
   {
+    this.allActivities = []
+    this.allActivitiesNames = []
+    this.activityContents = []
     let idDeviceStr = this.devices.find(x => x.name == nameDevice)?.id.toString()
     this.http.get<ActivityModel[]>(`https://localhost:7042/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
     {
@@ -79,11 +82,17 @@ export class homeService {
 
   getActivityContentsByIDActivity(idActivityStr: any)
   {
+    this.activityContents = []
     this.http.get<any[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data => 
       {
-        this.activityContents = data 
+        if(data != null)
+        {          
+          this.activityContents = data 
+          this.activityContents = this.activityContents.sort((x: any, y: any) => x.pulseRate - y.pulseRate)          
+        }
+        
       }
-    )
-  }
+      )
+    }
 
 }

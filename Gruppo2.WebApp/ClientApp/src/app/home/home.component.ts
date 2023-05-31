@@ -51,6 +51,8 @@ export class HomeComponent {
   checkMail: boolean = false
 
   intervalMail: any
+  counterDevice: number = 0
+  counterActivity: number = 0
 
   ngOnInit(){
  //   this.startSimulator()
@@ -93,45 +95,11 @@ export class HomeComponent {
     })
   }
 
-  //  getUser(){
-  //   this.http.get<UserModel[]>(`${this.stringConnection}/user`).subscribe(data =>
-  //     {
-  //       this.users = data;
-  //       let idUser = '0b48f4ed-7849-44eb-19bb-08db47ee099c'
-  //       this.getDevicesbyIDUser(idUser)
-  //     },error =>
-  //     {
-  //       console.log(error)
-  //     }
-  //     );
-
-  //     console.log(window.location.origin)
-  // }
-
-  // getActivitiesByIDDevice(idDeviceStr: any)
-  // {
-  //   this.allActivities = []
-  //   this.allActivitiesNames = []
-  //   this.activityNameSelected = null
-  //   this.http.get<ActivityModel[]>(`${this.stringConnection}/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
-  //     {
-  //       if(activities != null)
-  //       {
-  //         this.allActivities = activities
-  //         this.allActivities.forEach((x: any, index: any) =>
-  //           {
-  //             this.allActivitiesNames.push("Allenamento: " + x.id)
-  //           })
-  //           this.activityNameSelected = this.allActivitiesNames[0]
-  //       }
-  //     })
-  // }
 
 
 
-
-
-  addUser(e: any){
+  addUser(e: any)
+  {
     const body = e.data;
     console.log(body)
   }
@@ -150,17 +118,27 @@ export class HomeComponent {
 
 
 
-  changeDevice(event: any)
+  changeDevice(name: any)
   {
-    // console.log(event)
-    // let idDevice = this.allDevices.find(x => x.name == event)?.id.toString()
-    // this.getActivitiesByIDDevice(idDevice)
+    if(this.counterDevice > 0)
+    {
+      this.homeService.getActivitiesbyIDDevice(name)
+    }
+    this.counterDevice++
+    
   }
 
 
-  changeActivity(event: any)
+  changeActivity(event: any)//quando si cambia attività
   {
-    console.log(event)
+    if(this.counterActivity > 0)
+    {
+      let splitnameactivity = event.split(" ")
+      let activitySelected = this.homeService.allActivities.find(x => x.id == splitnameactivity[1])
+      this.homeService.getActivityContentsByIDActivity(activitySelected.id)
+      console.log(event)
+    }
+    this.counterActivity++
   }
 
   //per grafico
