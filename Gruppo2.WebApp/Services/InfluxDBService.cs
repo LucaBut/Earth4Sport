@@ -45,42 +45,22 @@ namespace Gruppo2.WebApp
             QueryApi queryApi = client.GetQueryApi();            
             List<FluxTable> tables = await queryApi.QueryAsync(query, _organization);
 
-            //if (tables.Count() == 0)
-            //    return NoContent();
-
-
-
-
             client.Dispose();//per chiudere connessione
+
+            if (!tables.Any())
+                throw new Exception();
 
 
             List<ActivityContent> activityContents = new List<ActivityContent>();
 
 
 
-            ////firstTable
-            //FluxTable firstTable = new FluxTable();
-            //firstTable = tables[0];
-
-            ////secondTable
-            //FluxTable secondTable = new FluxTable();
-            //secondTable = tables[1];
-
-
-
-            //List<FluxRecord> recordsFirstTable = new List<FluxRecord>();
-            //for(int i = 0; i < firstTable.Records.Count(); i++)
-            //{
-            //    ActivityContent activityContentSelected = new ActivityContent();
-            //    var prova = firstTable.Records[i].GetField();
-            //}
-
             int i = 0;
             FluxTable firstTable = new FluxTable();
             firstTable = tables[0];
             //// Leggi i dati restituiti
-           
-                // Leggi le righe dei risultati
+
+            // Leggi le righe dei risultati
             List<FluxRecord> records = firstTable.Records;
 
             foreach (FluxRecord record in records)
