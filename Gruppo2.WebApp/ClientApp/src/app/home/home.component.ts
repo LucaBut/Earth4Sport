@@ -55,8 +55,8 @@ export class HomeComponent {
   counterActivity: number = 0
 
   ngOnInit(){
-    this.startSimulator()
- //  this.checkIfLogged()   
+    //  this.startSimulator()
+ this.checkIfLogged()   
   }
 
   getUser(mail :any){
@@ -106,8 +106,8 @@ export class HomeComponent {
 
   startSimulator()
   {
-    let idActivity = '0b48f4ed-7849-4455-19bb-08db47ee099d'
-    let idDevice = '02222222-2222-2222-2222-22222222222a'
+    let idActivity = '0b48f4ed-7849-4455-19bb-08db47ee0990'
+    let idDevice = '03333333-3333-3333-3333-33333333333a'
     this.http.get(`${this.stringConnection}/influx/` + idActivity + '/' + idDevice).subscribe()
   }
   stopSimulator()

@@ -44,7 +44,7 @@ namespace Gruppo2.WebApp.Controllers
 
 
 
-        [HttpGet("{idActivity}")]
+        [HttpGet("{idActivity}/{idDevice}")]
         public Task Invoke(string idActivity, string idDevice)
         {
             
