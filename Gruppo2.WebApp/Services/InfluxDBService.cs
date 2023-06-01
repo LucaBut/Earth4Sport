@@ -177,6 +177,7 @@ namespace Gruppo2.WebApp
                 else
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
+                    
                     ReturnToNormalPulseRate(ref pulseRate);
                 }
             }

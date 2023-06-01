@@ -19,5 +19,6 @@ namespace Gruppo2.WebApp
         public virtual DbSet<Device> Device { get; set; }
 
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<NotificationError> NotificationError { get; set; }
     }
 }

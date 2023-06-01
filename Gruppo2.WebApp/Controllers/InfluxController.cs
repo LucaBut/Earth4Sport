@@ -1,4 +1,5 @@
-﻿using Gruppo2.WebApp.ClassUtils;
+﻿using AutoMapper;
+using Gruppo2.WebApp.ClassUtils;
 using Gruppo2.WebApp.Models;
 using Gruppo2.WebApp.Models.Dtos;
 using Gruppo2.WebApp.Services;
@@ -18,10 +19,15 @@ namespace Gruppo2.WebApp.Controllers
     public class InfluxController : ControllerBase
     {
         private readonly InfluxDBService _InfluxDbService;
-        
-        public InfluxController(InfluxDBService influxDbService)
+        private readonly WebAppContex _context;
+
+        private readonly IMapper _mapper;
+
+        public InfluxController(InfluxDBService influxDbService, WebAppContex context, IMapper mapper)
         {
             _InfluxDbService = influxDbService;
+            _context = context;
+            _mapper = mapper;
         }
 
         
@@ -39,10 +45,10 @@ namespace Gruppo2.WebApp.Controllers
 
 
         [HttpGet("{idActivity}")]
-        public Task Invoke(string idActivity)
+        public Task Invoke(string idActivity, string idDevice)
         {
             
-            Start(idActivity);//per adesso simulatore qua per prova ma sul suo servizio
+            Start(idActivity, idDevice);//per adesso simulatore qua per prova ma sul suo servizio
             return Task.CompletedTask;
         }
 
@@ -59,7 +65,7 @@ namespace Gruppo2.WebApp.Controllers
 
 
 
-        public async void Start(string idActivity)
+        public async void Start(string idActivity, string idDevice)
         {
             bool moving = true;     // true quando sta avanzando, false quando torna indietro (andamento nella piscina)
             int nPools = 0;
@@ -95,6 +101,20 @@ namespace Gruppo2.WebApp.Controllers
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
                     ReturnToNormalPulseRate(ref pulseRate);
+
+                    Guid idActivityGuid = Guid.Parse(idActivity);           
+                    Guid idDeviceGuid = Guid.Parse(idDevice);
+                    
+                    //inserimento riga su NotificationError
+                    NotificationError notificationError = new NotificationError();
+                    notificationError.IdActivity = idActivityGuid;
+                    notificationError.IdDevice = idDeviceGuid;
+                    notificationError.PulseRate = Convert.ToString(pulseRate);
+                    notificationError.Created = DateTime.Now;
+                    _context.NotificationError.Add(notificationError);
+                    await _context.SaveChangesAsync();
+
+
                 }
 
                 DataFromSimulator dataFromSimulator = new DataFromSimulator();
