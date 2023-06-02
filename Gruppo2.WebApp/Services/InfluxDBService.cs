@@ -39,7 +39,8 @@ namespace Gruppo2.WebApp
 
 
             string query = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
-                               "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")"; // Esempio di query con filtro sul campo idActivity
+                               "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")" +
+                               "|> filter(fn: (r) => r._field == \"pulseRate\")"; // Esempio di query con filtro sul campo idActivity
 
 
             QueryApi queryApi = client.GetQueryApi();            
@@ -75,17 +76,18 @@ namespace Gruppo2.WebApp
                 activityContent.IdActivity = idActivitytoInsert;
 
                 //per trovare il pulseRate
-                string pulseRateStr = tables[1].Records[i].GetValue().ToString();
-                activityContent.PulseRate = pulseRateStr;
+                int pulseRate = Convert.ToInt32(tables[0].Records[i].GetValue());
+                activityContent.PulseRate = pulseRate;
 
                 //per trovare il position
-                string position = values.First(x => x.Key == "_value").Value.ToString();
-                activityContent.Position = position;
+                //string position = values.First(x => x.Key == "_value").Value.ToString();
+                //activityContent.Position = position;
 
 
                 string time = values.First(x => x.Key == "_time").Value.ToString();
                 DateTime dateTime = Convert.ToDateTime(time);
-                string timeToInsert = dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+                string strTime = dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+                DateTime timeToInsert = Convert.ToDateTime(strTime);
                 activityContent.Time = timeToInsert;
 
 

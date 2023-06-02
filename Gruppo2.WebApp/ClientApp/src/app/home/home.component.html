@@ -23,19 +23,23 @@
 
 <!-- GRAFICO ACTIVITY CONTENT -->
 <div id="chart-demo">
-  <dx-chart
-    title="Activity Contents"
-    [dataSource]="homeService.activityContents"
-  >
-    <dxi-series valueField="pulseRate" name="pulseRate"></dxi-series>
-    <dxo-common-series-settings
-    #commonSeries
-      argumentField="time"
-      [type]="types[0]"
-    >
+  <dx-chart title="Activity Contents"
+            [dataSource]="homeService.activityContents">
+    <dxi-series valueField="pulseRate" name="Pulse Rate"></dxi-series>
+    <dxo-common-series-settings #commonSeries
+                                argumentField="time"
+                                [type]="types[0]">
     </dxo-common-series-settings>
     <dxo-margin [bottom]="20"></dxo-margin>
-    <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+
+    <!-- asse x: data/ora -->
+    <dxo-argument-axis [valueMarginsEnabled]="false" argumentType="datetime" type="continuous">
+      <dxo-tick-interval [seconds]="10"></dxo-tick-interval>
+      <dxo-tick [visible]="true"></dxo-tick>
+      <dxo-minor-tick-interval [seconds]="5"></dxo-minor-tick-interval>
+      <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+    </dxo-argument-axis>
+
     <dxo-export [enabled]="true"></dxo-export>
     <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
     </dxo-legend>
