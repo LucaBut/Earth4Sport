@@ -1,0 +1,16 @@
+<!-- GRAFICO ACTIVITY CONTENT -->
+<div id="chart-demo">
+  <dx-chart title="Activity Contents"
+            [dataSource]="service.activityContents">
+    <dxi-series valueField="pulseRate" name="pulseRate"></dxi-series>
+    <dxo-common-series-settings #commonSeries
+                                argumentField="time"
+                                [type]="types[0]">
+    </dxo-common-series-settings>
+    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+    </dxo-legend>
+  </dx-chart>
+</div>

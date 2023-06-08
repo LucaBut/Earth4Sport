@@ -10,11 +10,11 @@ import { ActivityModel } from '../models/activity-model';
 export class homeService {
 
   users: UserModel[] = [];
-  devices: DeviceModel[] = [];
+  public devices: DeviceModel[] = [];
   public user: UserModel = <UserModel>{}
   public nameDevices: any[] = []
   public deviceSelectedName: any | null = ''
-  allActivities: any[] = []
+  public allActivities: ActivityModel[] = []
   allActivitiesNames: any[] = []
   activityNameSelected: any
   activityContents: any[] = []
@@ -29,7 +29,7 @@ export class homeService {
         {
           this.user = result
           this.getDevices(result);
-        }        
+        }
       })
 
   }
@@ -46,14 +46,15 @@ export class homeService {
         if(result != null)
         {
           this.devices = result;
-          this.devices.forEach(x => 
+          this.devices.forEach(x =>
             {
               this.nameDevices.push(x.name)
+              console.log(this.nameDevices)
               if(this.nameDevices.length == 1)//prendo sempre il primo
                 this.deviceSelectedName = x.name
             })
           this.getActivitiesbyIDDevice(this.deviceSelectedName)
-        }        
+        }
       })
   }
 
@@ -83,14 +84,14 @@ export class homeService {
   getActivityContentsByIDActivity(idActivityStr: any)
   {
     this.activityContents = []
-    this.http.get<any[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data => 
+    this.http.get<any[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
       {
         if(data != null)
-        {          
-          this.activityContents = data 
-          this.activityContents = this.activityContents.sort((x: any, y: any) => x.pulseRate - y.pulseRate)          
+        {
+          this.activityContents = data
+          this.activityContents = this.activityContents.sort((x: any, y: any) => x.pulseRate - y.pulseRate)
         }
-        
+
       }
       )
     }

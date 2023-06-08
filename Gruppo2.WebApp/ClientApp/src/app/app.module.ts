@@ -11,6 +11,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { ActivityDetailComponent } from './activity-detail/activity-detail.component';
 import { DxDataGridModule, DxFormModule, DxButtonModule, DxSelectBoxModule, DxChartModule } from 'devextreme-angular';
 import { NotFoundComponent } from './not-found/not-found.component';
 
@@ -21,7 +22,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     HomeComponent,
     LoginComponent,
     LogoutComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ActivityDetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,8 +37,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
     RouterModule.forRoot([
       { path: '', component: LoginComponent, pathMatch: 'full' },
       { path: 'home', component: HomeComponent},
+      { path: 'activities/:id', component: ActivityDetailComponent},
       { path: '404', component: NotFoundComponent},
-      { path: '**', redirectTo: '/404'}
+      { path: '**', redirectTo: '/404'},
     ]),
     AuthModule.forRoot({
       domain: 'dev-a4110pdwo8van30s.us.auth0.com',

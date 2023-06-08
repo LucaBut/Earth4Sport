@@ -56,15 +56,19 @@ export class HomeComponent {
 
   ngOnInit(){
     //  this.startSimulator()
- this.checkIfLogged()   
+    // this.homeService.getDevices(this.user)
+    this.checkIfLogged()
   }
 
-  getUser(mail :any){
+  onRowClick(e: any){
+    const idActivity = e.data.id
+    this.route.navigateByUrl(`activities/${idActivity}`)
+  }
+
+  getUser(mail: any){
     this.homeService.getUser(mail)
     this.homeService.user
   }
-
-
 
   checkIfLogged() {
     if (window.sessionStorage.getItem('isLogged')) {
@@ -91,7 +95,7 @@ export class HomeComponent {
         clearInterval(this.intervalMail)
         mail = element?.email
         this.getUser(mail)
-      }       
+      }
     })
   }
 
@@ -126,7 +130,7 @@ export class HomeComponent {
       this.homeService.getActivitiesbyIDDevice(name)
     }
     this.counterDevice++
-    
+
   }
 
 
@@ -136,7 +140,7 @@ export class HomeComponent {
     {
       let splitnameactivity = event.split(" ")
       let activitySelected = this.homeService.allActivities.find(x => x.id == splitnameactivity[1])
-      this.homeService.getActivityContentsByIDActivity(activitySelected.id)
+      this.homeService.getActivityContentsByIDActivity(activitySelected?.id)
       console.log(event)
     }
     this.counterActivity++
