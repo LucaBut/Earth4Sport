@@ -1,39 +1,90 @@
-<div style="display: flex;">
+<div style="display: flex">
   <!-- SELECT DEVICE -->
   <div class="dx-fieldset">
     <div class="dx-field">
       <div class="dx-field-label">Devices</div>
       <div class="dx-field-value">
-        <dx-select-box [dataSource]="homeService.nameDevices" [value]="homeService.deviceSelectedName" (selectedItemChange)="changeDevice($event)"></dx-select-box>
-      </div>
-    </div> 
-  </div>
-
-  <!-- SELECT ACTIVITIES -->
-  <div class="dx-fieldset" >
-    <div class="dx-field"style="width: 400px;">
-      <div class="dx-field-label" >Activities</div>
-      <div class="dx-field-value" >
-        <dx-select-box [dataSource]="homeService.allActivitiesNames" [value]="homeService.activityNameSelected" (selectedItemChange)="changeActivity($event)"></dx-select-box>
+        <dx-select-box
+          [dataSource]="homeService.nameDevices"
+          [value]="homeService.deviceSelectedName"
+          (selectedItemChange)="changeDevice($event)"
+        ></dx-select-box>
       </div>
     </div>
   </div>
 
+  <!-- SELECT ACTIVITIES -->
+  <!-- <div class="dx-fieldset">
+    <div class="dx-field" style="width: 400px">
+      <div class="dx-field-label">Activities</div>
+      <div class="dx-field-value">
+        <dx-select-box
+          [dataSource]="homeService.allActivitiesNames"
+          [value]="homeService.activityNameSelected"
+          (selectedItemChange)="changeActivity($event)"
+        ></dx-select-box>
+      </div>
+    </div>
+  </div> -->
+</div>
+
+<div>
+  <dx-data-grid
+    [dataSource]="homeService.allActivities"
+    [allowColumnResizing]="true"
+    [columnAutoWidth]="true"
+    [hoverStateEnabled]="true"
+    [showColumnHeaders]="true"
+    [showBorders]="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [allowColumnReordering]="true"
+    (onRowClick)="onRowClick($event)"
+    (onEditingStart)="onRowClick($event)"
+  >
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-load-panel [enabled]="true"></dxo-load-panel>
+    <!-- <dxi-column dataField="name"></dxi-column> -->
+    <dxi-column dataField="id"></dxi-column>
+    <dxi-column dataField="startDate" dataType="datetime"></dxi-column>
+    <dxi-column dataField="stopDate" dataType="datetime"></dxi-column>
+    <dxi-column dataField="poolsNumber"></dxi-column>
+    <dxo-editing
+        mode="form"
+        [allowUpdating]="true"
+        [allowDeleting]="false"
+        [allowAdding]="false"
+        [useIcons]="true"
+      ></dxo-editing>
+      <dxi-column type="buttons">
+        <dxi-button name="edit" icon="search"></dxi-button>
+      </dxi-column>
+  </dx-data-grid>
 </div>
 
 <!-- GRAFICO ACTIVITY CONTENT -->
-<div id="chart-demo">
-  <dx-chart title="Activity Contents"
-            [dataSource]="homeService.activityContents">
+<!-- <div id="chart-demo">
+  <dx-chart
+    title="Activity Contents"
+    [dataSource]="homeService.activityContents"
+  >
     <dxi-series valueField="pulseRate" name="Pulse Rate"></dxi-series>
-    <dxo-common-series-settings #commonSeries
-                                argumentField="time"
-                                [type]="types[0]">
+    <dxo-common-series-settings
+      #commonSeries
+      argumentField="time"
+      [type]="types[0]"
+    >
     </dxo-common-series-settings>
-    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-margin [bottom]="20"></dxo-margin> -->
 
     <!-- asse x: data/ora -->
-    <dxo-argument-axis [valueMarginsEnabled]="false" argumentType="datetime" type="continuous">
+    <!-- <dxo-argument-axis
+      [valueMarginsEnabled]="false"
+      argumentType="datetime"
+      type="continuous"
+    >
       <dxo-tick-interval [seconds]="10"></dxo-tick-interval>
       <dxo-tick [visible]="true"></dxo-tick>
       <dxo-minor-tick-interval [seconds]="5"></dxo-minor-tick-interval>
@@ -53,4 +104,4 @@
     <dx-select-box [dataSource]="types" [(value)]="commonSeries.type">
     </dx-select-box>
   </div>
-</div>
+</div> -->
