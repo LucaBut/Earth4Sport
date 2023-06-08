@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Gruppo2.WebApp.Controllers
@@ -43,6 +44,25 @@ namespace Gruppo2.WebApp.Controllers
             Console.WriteLine(users);
             return usersDto;
         }
+
+        //restituisce gli users con di quelli ids
+        [HttpGet("GetUsersByIdsSelected/{usersIds}")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByIdsSelected(Guid[] usersIds)
+        {
+            List<User> users = new List<User>();
+            users = await _context.User.Where(x => usersIds.Contains(x.Id)).ToListAsync();
+            if (!users.Any())
+                return NoContent();
+
+
+            List<UserDto> usersDto = new List<UserDto>();
+            _mapper.Map(users, usersDto);
+            return usersDto;
+        }
+
+
+
+
 
         [HttpGet("GetUserByMail/{mail}")]
         public async Task<ActionResult<UserDto>> GetUserByEmailAsync(string mail)
