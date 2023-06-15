@@ -61,6 +61,30 @@ namespace Gruppo2.WebApp.Controllers
         }
 
 
+        //restituisce gli users con di quelli ids
+        [HttpGet("GetUsersTest")]
+        public async Task<ActionResult<IEnumerable<string>>> GetUsersTest()
+        {
+            List<string> records = new List<string>();
+            string record = "";
+
+            List<User> users = new List<User>();
+            users = await _context.User.ToListAsync();
+            if (!users.Any())
+            {
+                record = "non trovo nessun cazzo di utente";
+                records.Add(record);    
+                return records;
+            }
+
+
+            record = "ho trovato qualche utente pezzo di merda, sei un coglione";
+            records.Add(record);
+            return records;
+
+        }
+
+
 
 
 
