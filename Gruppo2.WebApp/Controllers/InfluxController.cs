@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gruppo2.WebApp.ClassUtils;
-using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Entities;
 using Gruppo2.WebApp.Models.Dtos;
 using Gruppo2.WebApp.Services;
 using InfluxDB.Client;

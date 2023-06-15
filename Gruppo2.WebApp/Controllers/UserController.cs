@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Entities;
 using Gruppo2.WebApp.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -67,20 +67,38 @@ namespace Gruppo2.WebApp.Controllers
         {
             List<string> records = new List<string>();
             string record = "";
-
-            List<User> users = new List<User>();
-            users = await _context.User.ToListAsync();
-            if (!users.Any())
+            User user = new User();
+            
+            try
             {
-                record = "non trovo nessun cazzo di utente";
-                records.Add(record);    
+                user = await _context.User.FirstAsync();
+                record = user.Name;
+                records.Add(record);
+                return records;
+
+            }
+            catch (Exception ex)
+            {
+                record = "sono un coglione e non ho trovato un cazzo" + ex.Message.ToString();
+                records.Add(record);
                 return records;
             }
+            
 
 
-            record = "ho trovato qualche utente pezzo di merda, sei un coglione";
-            records.Add(record);
-            return records;
+            //List<User> users = new List<User>();
+            //users = await _context.User.ToListAsync();
+            //if (!users.Any())
+            //{
+            //    record = "non trovo nessun cazzo di utente";
+            //    records.Add(record);    
+            //    return records;
+            //}
+
+
+            //record = "ho trovato qualche utente pezzo di merda, sei un coglione";
+            //records.Add(record);
+            //return records;
 
         }
 

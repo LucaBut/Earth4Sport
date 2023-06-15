@@ -1,4 +1,4 @@
-﻿namespace Gruppo2.WebApp.Models
+﻿namespace Gruppo2.WebApp.Entities
 {
     public class NotificationError
     {

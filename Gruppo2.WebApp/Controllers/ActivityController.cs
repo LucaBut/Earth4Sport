@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Gruppo2.WebApp.Models;
 using Gruppo2.WebApp.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,7 @@ using System.Diagnostics;
 
 namespace Gruppo2.WebApp.Controllers
 {
-    
+
     [ApiController]
     [Route("[controller]")]
     public class ActivityController : ControllerBase
@@ -24,7 +23,7 @@ namespace Gruppo2.WebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<bool>> GetActivityAsync()
         {
-            List<Models.Activity> activities = new List<Models.Activity>();
+            List<Entities.Activity> activities = new List<Entities.Activity>();
             activities = await _context.Activity.ToListAsync();
             Console.WriteLine(activities);
             return true;
@@ -35,7 +34,7 @@ namespace Gruppo2.WebApp.Controllers
 
             Guid idDevice = Guid.Parse(idDeviceStr);
             //put in list activity filtered by id device from db
-            List<Models.Activity> activities = new List<Models.Activity>();
+            List<Entities.Activity> activities = new List<Entities.Activity>();
             activities = await _context.Activity
                                         .Where(x => x.IDDevice == idDevice)
                                         .ToListAsync();
@@ -45,7 +44,7 @@ namespace Gruppo2.WebApp.Controllers
             
             List<ActivityDto> activityDtos= new List<ActivityDto>();
 
-            foreach (Models.Activity activity in activities)
+            foreach (Entities.Activity activity in activities)
             {
                 ActivityDto activityDto = new ActivityDto();
                 _mapper.Map(activity, activityDto);

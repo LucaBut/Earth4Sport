@@ -1,5 +1,4 @@
 ﻿using Azure;
-using Gruppo2.WebApp.Models;
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Gruppo2.WebApp.Models.Dtos;
 using AutoMapper;
 using Gruppo2.WebApp.ClassUtils;
+using Gruppo2.WebApp.Entities;
 
 namespace Gruppo2.WebApp
 {

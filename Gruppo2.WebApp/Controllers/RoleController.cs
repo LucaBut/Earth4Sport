@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,5 @@
 ﻿using Azure.Storage.Queues;
-using Gruppo2.WebApp.Models;
+using Gruppo2.WebApp.Entities;
 using System.Text.Json;
 
 namespace Gruppo2.WebApp.Services
