@@ -1,7 +1,10 @@
-﻿namespace Gruppo2.WebApp.Models.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Gruppo2.WebApp.Models.Dtos
 {
     public class ActivityDto
     {
+        [Key]
         public Guid Id { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? StopDate { get; set; }
