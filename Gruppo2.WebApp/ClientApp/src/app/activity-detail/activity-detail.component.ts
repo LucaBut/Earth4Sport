@@ -13,7 +13,12 @@ export class ActivityDetailComponent {
  id = this.route.snapshot.paramMap.get('id');
  types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
 
-  ngOnInit(){
+  ngOnInit()
+  {
     this.service.getActivityContentsByIDActivity(this.id)
+  }
+  ngOnDestroy()
+  {
+    this.service.activityContents = []
   }
 }

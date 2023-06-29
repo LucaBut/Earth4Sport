@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UserModel } from '../models/user-model';
 import { AuthService } from '@auth0/auth0-angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Device } from 'devextreme/core/devices';
 import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
@@ -40,11 +40,20 @@ export class HomeComponent {
   activityNameSelected: any
   deviceNameSelected: any
   activityContents: any
-
+  fromactivityDetail: boolean = false
 
   types: string[] = ['area', 'stackedarea', 'fullstackedarea'];
 
-  constructor(private http: HttpClient, public auth: AuthService, private route: Router, public homeService: homeService){}
+  constructor(private http: HttpClient, public auth: AuthService, private route: Router, public homeService: homeService, private router : ActivatedRoute)
+  {
+    this.router.params.subscribe((params : any) =>
+    {
+      if(params.fromActivityDetail)
+      {
+        this.fromactivityDetail = true
+      }
+    })
+  }
 
   userEmail: string | undefined = "";
 
@@ -57,11 +66,23 @@ export class HomeComponent {
   ngOnInit(){
     //  this.startSimulator()
     // this.homeService.getDevices(this.user)
-    this.checkIfLogged()
+    
+    
+    
+    if(!this.fromactivityDetail)
+    {
+      this.checkIfLogged()
+    }
+    else
+    {
+      this.homeService.getDevices(this.homeService.user)
+    }
   }
 
   onRowClick(e: any){
     const idActivity = e.data.id
+    this.homeService.allActivities = []
+    this.homeService.allActivitiesNames = []
     this.route.navigateByUrl(`activities/${idActivity}`)
   }
 
@@ -76,7 +97,7 @@ export class HomeComponent {
       this.refreshEmail()
     } else {
       this.isLogged = false;
-      this.route.navigateByUrl('')
+      //this.route.navigateByUrl('')
     }
   }
 

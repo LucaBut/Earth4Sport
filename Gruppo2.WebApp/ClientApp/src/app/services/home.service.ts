@@ -17,7 +17,7 @@ export class homeService {
   public allActivities: ActivityModel[] = []
   allActivitiesNames: any[] = []
   activityNameSelected: any
-  activityContents: any[] = []
+  public activityContents: any[] = []
 
   constructor(private http: HttpClient) { }
 
@@ -76,7 +76,7 @@ export class homeService {
           })
           this.activityNameSelected = this.allActivitiesNames[0]
           let idactivity = this.allActivities[0].id.toString()
-          this.getActivityContentsByIDActivity(idactivity)
+        //  this.getActivityContentsByIDActivity(idactivity)
       }
     })
   }
@@ -89,11 +89,26 @@ export class homeService {
         if(data != null)
         {
           this.activityContents = data
-          this.activityContents = this.activityContents.sort((x: any, y: any) => x.pulseRate - y.pulseRate)
+          this.activityContents.forEach(x => {
+            x.time = this.getDateFromString(x.time)
+            console.log("Questa è la data " + x.time)
+          })
+          //this.activityContents = this.activityContents.sort((x: any, y: any) => x.pulseRate - y.pulseRate)
         }
 
       }
       )
-    }
+  }
+
+  getDateFromString(dateString: string)//da una stringa mi ricavo la data
+  {
+    const [day, month, year] = dateString.split('/');
+    let year2 = year.split(" ")
+    let year3 = year2[0]
+    // 25/06/2023 18:21:48
+    const [hours, minutes, seconds] = year2[1].split(':');
+    const date = new Date(+year3, +month - 1, +day, parseInt(hours), parseInt(minutes), parseInt(seconds))
+    return date
+  }
 
 }

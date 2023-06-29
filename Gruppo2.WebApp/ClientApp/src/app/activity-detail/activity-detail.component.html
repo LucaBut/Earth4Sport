@@ -1,16 +1,61 @@
+<dx-button font-size="30" text="←" [routerLink]="['/home', { fromActivityDetail: true }]"></dx-button>
+
 <!-- GRAFICO ACTIVITY CONTENT -->
 <div id="chart-demo">
   <dx-chart title="Activity Contents"
             [dataSource]="service.activityContents">
-    <dxi-series valueField="pulseRate" name="pulseRate"></dxi-series>
-    <dxo-common-series-settings #commonSeries
+    <dxi-series valueField="pulseRate" name="pulseRate" type="spline"></dxi-series>
+    <dxo-common-axis-settings>
+      <dxo-grid [visible]="true"></dxo-grid>
+    </dxo-common-axis-settings>
+    <dxo-common-series-settings #seriesSettings
                                 argumentField="time"
                                 [type]="types[0]">
     </dxo-common-series-settings>
     <dxo-margin [bottom]="20"></dxo-margin>
-    <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+    <dxo-argument-axis [valueMarginsEnabled]="false" discreteAxisDivisionMode="crossLabels" ArgumentScaleType="Date">
+      <dxo-grid [visible]="true"></dxo-grid>
+    </dxo-argument-axis>
+    <!--<dxo-value-axis ></dxo-value-axis>-->
     <dxo-export [enabled]="true"></dxo-export>
-    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
-    </dxo-legend>
+    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"></dxo-legend>
+    <dxo-tooltip [enabled]="true"></dxo-tooltip>
   </dx-chart>
+</div>
+
+
+
+<div id="chart-demo">
+  <dx-chart palette="violet"
+            [dataSource]="service.activityContents"
+            title="Architecture Share Over Time (Count)">
+    <dxi-series valueField="pulseRate" name="pulseRate" typeof="spline"></dxi-series>
+    <dxo-common-series-settings #seriesSettings
+                                argumentField="time"
+                                [type]="types[0]">
+    </dxo-common-series-settings>
+    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-common-axis-settings>
+      <dxo-grid [visible]="true"></dxo-grid>
+    </dxo-common-axis-settings>
+    <dxo-legend verticalAlignment="top" horizontalAlignment="right">
+    </dxo-legend>
+    <dxo-argument-axis [allowDecimals]="false" [axisDivisionFactor]="60">
+      <dxo-label>
+        <dxo-format type="time"></dxo-format>
+      </dxo-label>
+    </dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+  </dx-chart>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <span>Series Type</span>
+      <dx-select-box [dataSource]="types"
+                     [(value)]="seriesSettings.type"
+                     [inputAttr]="{ 'aria-label': 'Series Type' }">
+      </dx-select-box>
+    </div>
+  </div>
 </div>
