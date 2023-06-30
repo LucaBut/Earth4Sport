@@ -11,6 +11,10 @@ namespace Gruppo2.WebApp.Models.Profiles
             CreateMap<User, UserDto>();
 
             CreateMap<UserDto, User>();
+
+            CreateMap<NotificationError, NotificationErrorDto>();
+
+            CreateMap<NotificationErrorDto, NotificationError>();
         }
     }
 }
