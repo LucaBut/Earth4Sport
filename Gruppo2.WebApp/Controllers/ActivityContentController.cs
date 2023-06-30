@@ -19,13 +19,13 @@ namespace Gruppo2.WebApp.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<bool>> GetActivityContentAsync()
-        {
-            List<ActivityContent> activityContents = new List<ActivityContent>();
-            activityContents = await _context.ActivityContent.ToListAsync();
-            Console.WriteLine(activityContents);
-            return true;
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<bool>> GetActivityContentAsync()
+        //{
+        //    List<ActivityContent> activityContents = new List<ActivityContent>();
+        //    activityContents = await _context.ActivityContent.ToListAsync();
+        //    Console.WriteLine(activityContents);
+        //    return true;
+        //}
     }
 }
