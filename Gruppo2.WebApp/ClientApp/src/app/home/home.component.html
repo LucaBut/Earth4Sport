@@ -13,10 +13,10 @@
     </div>
   </div>
 
- <dx-button text="Start" type="success" height="20" (onClick)="startSimulator()"></dx-button>
 </div>
 
 <div>
+  <dx-button [ngClass]="{'dx-button-content': true}" text="Start" type="success" height="20" (onClick)="startSimulator()"></dx-button>
   <dx-data-grid
     [dataSource]="homeService.allActivities"
     [allowColumnResizing]="true"
