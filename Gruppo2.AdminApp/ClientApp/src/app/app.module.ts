@@ -24,8 +24,7 @@ import { ErrorsComponent } from './errors/errors.component';
     FormsModule,
     DxDataGridModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'errors', component: ErrorsComponent}
+      { path: '', component: ErrorsComponent, pathMatch: 'full' }
     ])
   ],
   providers: [],
