@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user-model';
 import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
+import { User } from '@auth0/auth0-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +57,13 @@ export class homeService {
           this.getActivitiesbyIDDevice(this.deviceSelectedName)
         }
       })
+  }
+
+  getIdDeviceByDeviceName(nameDevice: any){
+    let idDevice = this.devices.find(x => x.name == nameDevice)?.id;
+    let idUser = this.user.id;
+
+    this.http.get(`https://localhost:7042/influx/start-simulator/${idDevice}/${idUser}`).subscribe();
   }
 
 
