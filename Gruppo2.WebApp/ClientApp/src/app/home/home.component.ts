@@ -133,7 +133,7 @@ export class HomeComponent {
     // let idActivity = '0b48f4ed-7849-4455-19bb-08db47ee0990'
     // let idDevice = '03333333-3333-3333-3333-33333333333a'
     // this.http.get(`${this.stringConnection}/influx/` + idActivity + '/' + idDevice).subscribe()
-    this.homeService.getIdDeviceByDeviceName(this.homeService.deviceSelectedName);
+    this.homeService.startSimulator(this.homeService.deviceSelectedName);
   }
   stopSimulator()
   {

@@ -59,7 +59,7 @@ export class homeService {
       })
   }
 
-  getIdDeviceByDeviceName(nameDevice: any){
+  startSimulator(nameDevice: any){
     let idDevice = this.devices.find(x => x.name == nameDevice)?.id;
     let idUser = this.user.id;
 
