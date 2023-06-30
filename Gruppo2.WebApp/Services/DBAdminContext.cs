@@ -1,4 +1,5 @@
-﻿using Gruppo2.WebApp.Models;
+﻿using Gruppo2.WebApp.Entities;
+using Gruppo2.WebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 
