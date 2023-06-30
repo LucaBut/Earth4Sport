@@ -4,6 +4,7 @@ import { UserModel } from '../models/user-model';
 import { DeviceModel } from '../models/device-model';
 import { ActivityModel } from '../models/activity-model';
 import { User } from '@auth0/auth0-angular';
+import { ActivityContentModel } from '../models/activity-content.model';
 
 @Injectable({
   providedIn: 'root'
@@ -92,7 +93,7 @@ export class homeService {
   getActivityContentsByIDActivity(idActivityStr: any)
   {
     this.activityContents = []
-    this.http.get<any[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
+    this.http.get<ActivityContentModel[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
       {
         if(data != null)
         {

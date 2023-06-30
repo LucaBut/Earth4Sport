@@ -1,5 +1,11 @@
 <dx-button font-size="30" text="←" [routerLink]="['/home', { fromActivityDetail: true }]"></dx-button>
 
+<dx-map
+  [controls]="true"
+  [zoom]="10"
+  [center]="position.position">
+</dx-map>
+
 <!-- GRAFICO ACTIVITY CONTENT -->
 <div id="chart-demo">
   <dx-chart title="Activity Contents"
