@@ -1,6 +1,6 @@
 <div>
   <dx-data-grid
-    [dataSource]="users"
+    [dataSource]="errors"
     [hoverStateEnabled]="true"
     [showColumnHeaders]="true"
     [showBorders]="true"
@@ -22,12 +22,9 @@
     <dxo-load-panel [enabled]="true"></dxo-load-panel>
 
     <dxi-column dataField="id" [visible]="false"></dxi-column>
-    <dxi-column dataField="username"></dxi-column>
-    <dxi-column dataField="surname"></dxi-column>
-    <dxi-column dataField="name"></dxi-column>
-    <dxi-column dataField="email"></dxi-column>
-    <dxi-column dataField="birthDate" dataType="datetime"></dxi-column>
-    <dxi-column dataField="password" [visible]="false"></dxi-column>
-    <dxi-column dataField="idRole"></dxi-column>
+    <dxi-column dataField="idActivity"></dxi-column>
+    <dxi-column dataField="idDevice"></dxi-column>
+    <dxi-column dataField="created" dataType="datetime"></dxi-column>
+    <dxi-column dataField="pulseRate"></dxi-column>
   </dx-data-grid>
 </div>
