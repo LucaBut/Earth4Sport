@@ -2,7 +2,7 @@
 {
     public class NotificationError
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid IdActivity { get; set; }
         public Guid IdDevice { get; set; }
         public string PulseRate { get; set; }

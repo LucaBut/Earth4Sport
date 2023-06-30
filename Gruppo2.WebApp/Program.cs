@@ -3,6 +3,7 @@ using Gruppo2.WebApp;
 using Gruppo2.WebApp.Models.Profiles;
 using Microsoft.EntityFrameworkCore;
 using Coravel;
+using Gruppo2.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 
 
-
+//database per utenti
 builder.Services.AddDbContext<WebAppContex>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("db"));
@@ -23,7 +24,24 @@ builder.Services.AddDbContext<WebAppContex>(options =>
 });
 
 
+
+//database per azienda
+builder.Services.AddDbContext<DBAdminContext>(optionsAdmin =>
+{
+    optionsAdmin.UseSqlServer(builder.Configuration.GetConnectionString("dbAdmin"));
+    optionsAdmin.EnableSensitiveDataLogging();
+    optionsAdmin.EnableDetailedErrors();
+});
+
+
+//database per azienda
+builder.Services.AddScoped<DBAdminContext, DBAdminContext>();
+
+//database per utenti
 builder.Services.AddScoped<WebAppContex, WebAppContex>();
+
+
+
 builder.Services.AddSingleton<InfluxDBService>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddCors(options =>
@@ -36,6 +54,7 @@ builder.Services.AddCors(options =>
                                               "http://localhost:44490").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                       });
 });
+
 
 var app = builder.Build();
 
