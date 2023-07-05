@@ -54,10 +54,10 @@ namespace Gruppo2.WebApp
             client.Dispose();//per chiudere connessione
 
             if (!tablePulseRate.Any())
-                throw new Exception();
+                throw new Exception("questa attività non ha dati");
 
             if (!tablePosition.Any())
-                throw new Exception();
+                throw new Exception("questa attività non ha dati");
 
 
             List<ActivityContent> activityContents = new List<ActivityContent>();

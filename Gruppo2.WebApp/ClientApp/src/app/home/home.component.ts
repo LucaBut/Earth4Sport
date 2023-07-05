@@ -64,19 +64,19 @@ export class HomeComponent {
   counterActivity: number = 0
 
   ngOnInit(){
-    this.startSimulator()
+    //this.startSimulator()
     // this.homeService.getDevices(this.user)
 
 
 
-    //if(!this.fromactivityDetail)
-    //{
-    //  this.checkIfLogged()
-    //}
-    //else
-    //{
-    //  this.homeService.getDevices(this.homeService.user)
-    //}
+    if(!this.fromactivityDetail)
+    {
+      this.checkIfLogged()
+    }
+    else
+    {
+      this.homeService.getDevices(this.homeService.user)
+    }
   }
 
   onRowClick(e: any){
