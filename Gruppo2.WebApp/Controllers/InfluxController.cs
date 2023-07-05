@@ -76,16 +76,26 @@ namespace Gruppo2.WebApp.Controllers
             using var scope = serviceProvider.CreateScope();
             var adminContext = scope.ServiceProvider.GetRequiredService<DBAdminContext>();
             var influxDBService = scope.ServiceProvider.GetRequiredService<InfluxDBService>();
+            var context = scope.ServiceProvider.GetRequiredService<WebAppContex>();
 
             bool moving = true;     // true quando sta avanzando, false quando torna indietro (andamento nella piscina)
             int nPools = 0;
             string geoCoordinates = "";
             geoCoordinates = InitGeoCoordinates();
             Console.WriteLine($"Init coordinate: {geoCoordinates}");
-
             Guid idActivityGuid = Guid.NewGuid();
 
+            //inserisco una nuova attività
+            Activity newActivity = new Activity();
+            newActivity.Id = Guid.NewGuid();
+            newActivity.StartDate = startTime;
+            newActivity.IDDevice = Guid.Parse(idDevice);
+            newActivity.PoolsNumber = 0;
+            context.Activity.Add(newActivity);
+            await context.SaveChangesAsync();
+
             Random nRandom = new Random();
+
             int randLatLong = nRandom.Next(0, 2);   // 0 viene modificata la latitudine (↔) (spostamento vert.)
                                                     // 1 viene modificate la longitudine (↕) (spostamento orizz.)
 
@@ -98,27 +108,31 @@ namespace Gruppo2.WebApp.Controllers
             pulseRate = InitPulseRate();
             Console.WriteLine($"Init battito cardiaco: {pulseRate}\n\n");
 
-            pulseRate = 205;
-
+            
             while (startTime.AddSeconds(duration) > DateTime.Now)
             {
 
                 ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving, ref nPools);
 
+                //scrivo il numero di vasche in real time
+                newActivity.PoolsNumber = nPools;
+                context.Activity.Update(newActivity);
+                await context.SaveChangesAsync();
+
+
+                await PopulateFromSimulator(pulseRate, geoCoordinates, idActivityGuid, nPools);
+
                 if (pulseRate > 30 && pulseRate < 200)
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate}");
 
-                    await PopulateFromSimulator(pulseRate, geoCoordinates, idActivityGuid, nPools);
 
                     ModifyPulseRate(ref pulseRate);
                 }
                 else
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
-
-                    await PopulateFromSimulator(pulseRate, geoCoordinates, idActivityGuid, nPools);
-
+                                   
                     Guid idDeviceGuid = Guid.Parse(idDevice);
                     Guid idUserGuid = Guid.Parse(idUser);
 
