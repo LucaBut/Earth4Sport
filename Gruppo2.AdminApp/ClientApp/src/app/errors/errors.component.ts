@@ -11,13 +11,13 @@ import { notificationErrorModelData } from '../models/notification-error.model';
 export class ErrorsComponent {
   constructor(private http: HttpClient){}
 
-  errors: NotificationErrorModel[] = notificationErrorModelData;
+  errors: NotificationErrorModel[] = [];
   baseUrl = "https://localhost:7042/";
 
   ngOnInit(){
-    // this.http.get<NotificationErrorModel[]>(this.baseUrl + "NotificationError/GetNotificationsErrors").subscribe(result => {
-    //   this.errors = result
-    // })
+    this.http.get<NotificationErrorModel[]>(this.baseUrl + "NotificationError/GetNotificationsErrors").subscribe(result => {
+      this.errors = result
+    })
   }
 
 }

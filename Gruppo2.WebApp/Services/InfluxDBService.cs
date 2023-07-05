@@ -34,37 +34,48 @@ namespace Gruppo2.WebApp
         {
             using var client = InfluxDBClientFactory.Create(_url, _token);//apri connessione a influxdb
 
-            //string query = "from(bucket: \"" + _bucket + "\"" + ") |>filter(fn: (r) => r[\"_measurement\"] == “idActivity”) |> range(start: 0)"; // Esempio di query per ottenere i dati degli ultimi 60 minuti
 
-
-
-            string query = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
+            string queryPulseRate = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
                                "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")" +
                                "|> filter(fn: (r) => r._field == \"pulseRate\")"; // Esempio di query con filtro sul campo idActivity
 
+            string queryPosition = "from(bucket: \"" + _bucket + "\") |> range(start: 0) " +
+                   "|> filter(fn: (r) => r[\"idActivity\"] == \"" + idActivity + "\")" +
+                   "|> filter(fn: (r) => r._field == \"position\")"; // Esempio di query con filtro sul campo idActivity
+
 
             QueryApi queryApi = client.GetQueryApi();            
-            List<FluxTable> tables = await queryApi.QueryAsync(query, _organization);
+            List<FluxTable> tablePulseRate = await queryApi.QueryAsync(queryPulseRate, _organization);
+
+            QueryApi queryApiPosition = client.GetQueryApi();
+            List<FluxTable> tablePosition = await queryApi.QueryAsync(queryPosition, _organization);
+
 
             client.Dispose();//per chiudere connessione
 
-            if (!tables.Any())
+            if (!tablePulseRate.Any())
+                throw new Exception();
+
+            if (!tablePosition.Any())
                 throw new Exception();
 
 
             List<ActivityContent> activityContents = new List<ActivityContent>();
+            List<ActivityContent> activityPositions = new List<ActivityContent>();
 
 
-
-            int i = 0;
-            FluxTable firstTable = new FluxTable();
-            firstTable = tables[0];
+            FluxTable firstTablePulseRate = new FluxTable();
+            firstTablePulseRate = tablePulseRate[0];
             //// Leggi i dati restituiti
+            FluxTable firstTablePosition = new FluxTable();
+            firstTablePosition = tablePosition[0];
 
             // Leggi le righe dei risultati
-            List<FluxRecord> records = firstTable.Records;
+            List<FluxRecord> recordsPulseRate = firstTablePulseRate.Records;
+            List<FluxRecord> recordsPosition = firstTablePosition.Records;
 
-            foreach (FluxRecord record in records)
+            int i = 0;
+            foreach (FluxRecord record in recordsPulseRate)
             {
                 // Leggi i campi e i valori del record
                 Dictionary<string, object> values = record.Values;
@@ -76,12 +87,12 @@ namespace Gruppo2.WebApp
                 activityContent.IdActivity = idActivitytoInsert;
 
                 //per trovare il pulseRate
-                int pulseRate = Convert.ToInt32(tables[0].Records[i].GetValue());
+                int pulseRate = Convert.ToInt32(tablePulseRate[0].Records[i].GetValue());
                 activityContent.PulseRate = pulseRate;
 
                 //per trovare il position
-                //string position = values.First(x => x.Key == "_value").Value.ToString();
-                //activityContent.Position = position;
+                string position = tablePosition[0].Records[i].GetValue().ToString();
+                activityContent.Position = position;
 
 
                 string time = values.First(x => x.Key == "_time").Value.ToString();

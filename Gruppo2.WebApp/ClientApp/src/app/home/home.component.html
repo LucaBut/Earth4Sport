@@ -13,22 +13,10 @@
     </div>
   </div>
 
-  <!-- SELECT ACTIVITIES -->
-  <!-- <div class="dx-fieldset">
-    <div class="dx-field" style="width: 400px">
-      <div class="dx-field-label">Activities</div>
-      <div class="dx-field-value">
-        <dx-select-box
-          [dataSource]="homeService.allActivitiesNames"
-          [value]="homeService.activityNameSelected"
-          (selectedItemChange)="changeActivity($event)"
-        ></dx-select-box>
-      </div>
-    </div>
-  </div> -->
 </div>
 
 <div>
+  <dx-button [ngClass]="{'dx-button-content': true}" text="Start Activity" type="success" height="20" (onClick)="startSimulator()"></dx-button>
   <dx-data-grid
     [dataSource]="homeService.allActivities"
     [allowColumnResizing]="true"

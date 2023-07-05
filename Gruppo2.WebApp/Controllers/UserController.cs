@@ -79,26 +79,11 @@ namespace Gruppo2.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                record = "sono un coglione e non ho trovato un cazzo" + ex.Message.ToString();
+                record = "Non ho trovato utenti...." + ex.Message.ToString();
                 records.Add(record);
                 return records;
             }
             
-
-
-            //List<User> users = new List<User>();
-            //users = await _context.User.ToListAsync();
-            //if (!users.Any())
-            //{
-            //    record = "non trovo nessun cazzo di utente";
-            //    records.Add(record);    
-            //    return records;
-            //}
-
-
-            //record = "ho trovato qualche utente pezzo di merda, sei un coglione";
-            //records.Add(record);
-            //return records;
 
         }
 
