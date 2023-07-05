@@ -19,36 +19,40 @@ namespace Gruppo2.WebApp.Controllers
     public class InfluxController : ControllerBase
     {
         private readonly InfluxDBService _InfluxDbService;
-        private readonly WebAppContex _context;
-
+        private readonly DBAdminContext _adminContext;
         private readonly IMapper _mapper;
+        private readonly IServiceProvider _serviceProvider;
 
-        public InfluxController(InfluxDBService influxDbService, WebAppContex context, IMapper mapper)
+        public InfluxController(InfluxDBService influxDbService, IMapper mapper, DBAdminContext adminContext, IServiceProvider serviceProvider)
         {
             _InfluxDbService = influxDbService;
-            _context = context;
             _mapper = mapper;
+            _adminContext = adminContext;
+            _serviceProvider = serviceProvider;
         }
 
-        
+
 
 
         [HttpGet("GetActivitiesContentbyIDActivity/{idActivityStr}")]//per leggere le tabelle di influx filtrate per idActivity
         public async Task<IEnumerable<ActivityContentDto>> GetActivitiesContentbyIDActivity(string idActivityStr)
         {
             Guid idActivity = Guid.Parse(idActivityStr);
-            return await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);            
+            return await _InfluxDbService.GetActivityContentsByIDActivity(idActivity);
         }
 
 
 
 
 
-        [HttpGet("{idActivity}/{idDevice}")]
-        public Task Invoke(string idActivity, string idDevice)
+        [HttpGet("{idDevice}/{idUser}")]
+        public Task Invoke(string idDevice, string idUser, int duration = 200)
         {
-            
-            Start(idActivity, idDevice);//per adesso simulatore qua per prova ma sul suo servizio
+            Task.Factory.StartNew(async () =>
+            {
+                await Start(_serviceProvider, idDevice, idUser, duration);//per adesso simulatore qua per prova ma sul suo servizio
+
+            });
             return Task.CompletedTask;
         }
 
@@ -63,15 +67,32 @@ namespace Gruppo2.WebApp.Controllers
         }
 
 
-
-
-        public async void Start(string idActivity, string idDevice)
+        [HttpPost("AddNotificationError")]
+        public async Task<bool> AddNotificationError(NotificationError error)
         {
+            //_errorService.PostNotificationError(error);
+            _adminContext.NotificationError.Add(error);
+            await _adminContext.SaveChangesAsync();
+            return true;
+        }
+
+
+
+
+        public async Task Start(IServiceProvider serviceProvider, string idDevice, string idUser, int duration)
+        {
+            var startTime = DateTime.Now;
+            using var scope = serviceProvider.CreateScope();
+            var adminContext = scope.ServiceProvider.GetRequiredService<DBAdminContext>();
+            var influxDBService = scope.ServiceProvider.GetRequiredService<InfluxDBService>();
+
             bool moving = true;     // true quando sta avanzando, false quando torna indietro (andamento nella piscina)
             int nPools = 0;
             string geoCoordinates = "";
             geoCoordinates = InitGeoCoordinates();
             Console.WriteLine($"Init coordinate: {geoCoordinates}");
+
+            Guid idActivityGuid = Guid.NewGuid();
 
             Random nRandom = new Random();
             int randLatLong = nRandom.Next(0, 2);   // 0 viene modificata la latitudine (↔) (spostamento vert.)
@@ -86,9 +107,8 @@ namespace Gruppo2.WebApp.Controllers
             pulseRate = InitPulseRate();
             Console.WriteLine($"Init battito cardiaco: {pulseRate}\n\n");
 
-            while (true)
+            while (startTime.AddSeconds(duration) > DateTime.Now)
             {
-                Thread.Sleep(10000);
 
                 ModifyGeoCoordinates(ref geoCoordinates, randLatLong, minValMovement, maxValMovement, ref moving, ref nPools);
 
@@ -102,30 +122,30 @@ namespace Gruppo2.WebApp.Controllers
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
                     ReturnToNormalPulseRate(ref pulseRate);
 
-                    Guid idActivityGuid = Guid.Parse(idActivity);           
+
                     Guid idDeviceGuid = Guid.Parse(idDevice);
-                    
+                    Guid idUserGuid = Guid.Parse(idUser);
+
                     //inserimento riga su NotificationError
                     NotificationError notificationError = new NotificationError();
                     notificationError.IdActivity = idActivityGuid;
                     notificationError.IdDevice = idDeviceGuid;
-                    notificationError.PulseRate = Convert.ToString(pulseRate);
-                    notificationError.Created = DateTime.Now;
-                    _context.NotificationError.Add(notificationError);
-                    await _context.SaveChangesAsync();
-
-
+                    notificationError.IdUser = idUserGuid;
+                    notificationError.Id = Guid.NewGuid();
+                    notificationError.PulseRate = pulseRate;
+                    notificationError.Date = DateTime.Now;
+                    await AddNotificationError(notificationError);
                 }
 
                 DataFromSimulator dataFromSimulator = new DataFromSimulator();
                 dataFromSimulator.PulseRate = pulseRate;
                 dataFromSimulator.GeoCoordinates = geoCoordinates;
-                dataFromSimulator.IdActivity = idActivity;
+                dataFromSimulator.IdActivity = idActivityGuid.ToString();
                 dataFromSimulator.NoPools = nPools;
                 await SendFromSimulator(dataFromSimulator);
-                
 
-            }   
+                Thread.Sleep(10000);
+            }
         }
 
         #region GeographicCoordinates
@@ -343,8 +363,8 @@ namespace Gruppo2.WebApp.Controllers
                     incrDecrease = nRandom.Next(-5, -3);
                     pulseRate += incrDecrease;
                     break;
-            }                     
-        }  
+            }
+        }
         #endregion
     }
 }

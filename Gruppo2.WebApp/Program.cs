@@ -4,6 +4,7 @@ using Gruppo2.WebApp.Models.Profiles;
 using Microsoft.EntityFrameworkCore;
 using Coravel;
 using Gruppo2.WebApp.Services;
+using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 

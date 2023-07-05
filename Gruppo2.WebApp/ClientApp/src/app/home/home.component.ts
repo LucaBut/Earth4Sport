@@ -64,18 +64,19 @@ export class HomeComponent {
   counterActivity: number = 0
 
   ngOnInit(){
-    //  this.startSimulator()
+    this.startSimulator()
     // this.homeService.getDevices(this.user)
 
 
-    if(!this.fromactivityDetail)
-    {
-      this.checkIfLogged()
-    }
-    else
-    {
-      this.homeService.getDevices(this.homeService.user)
-    }
+
+    //if(!this.fromactivityDetail)
+    //{
+    //  this.checkIfLogged()
+    //}
+    //else
+    //{
+    //  this.homeService.getDevices(this.homeService.user)
+    //}
   }
 
   onRowClick(e: any){
@@ -130,10 +131,10 @@ export class HomeComponent {
 
   startSimulator()
   {
-    // let idActivity = '0b48f4ed-7849-4455-19bb-08db47ee0990'
-    // let idDevice = '03333333-3333-3333-3333-33333333333a'
-    // this.http.get(`${this.stringConnection}/influx/` + idActivity + '/' + idDevice).subscribe()
-    this.homeService.startSimulator(this.homeService.deviceSelectedName);
+    let idActivity = '03333333-3333-3333-3333-333333333334'
+    let idDevice = '03333333-3333-3333-3333-33333333333a'
+    let idUser = '03333333-3333-3333-3333-333333333333'
+    this.http.get(`${this.stringConnection}/influx/` + idDevice + '/' + idUser).subscribe()
   }
   stopSimulator()
   {

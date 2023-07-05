@@ -26,15 +26,25 @@ namespace Gruppo2.WebApp.Controllers
         [HttpGet("GetNotificationsErrors")]
         public async Task<ActionResult<IEnumerable<NotificationErrorDto>>> GetNotificationsErrors()
         {
+
             List<NotificationError> notificationsError = new List<NotificationError>();
-            notificationsError = await _adminContext.NotificationError.ToListAsync();
+            try
+            {
+
+                notificationsError = await _adminContext.NotificationError.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex.Message}");
+            }
+
 
             if (!notificationsError.Any())
                 return NoContent();
 
             List<NotificationErrorDto> errorsDto = new List<NotificationErrorDto>();
 
-            foreach(NotificationError error in notificationsError)
+            foreach (NotificationError error in notificationsError)
             {
                 NotificationErrorDto _error = new NotificationErrorDto();
                 _mapper.Map(error, _error);
