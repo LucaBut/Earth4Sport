@@ -19,7 +19,6 @@ namespace Gruppo2.WebApp.Controllers
     public class InfluxController : ControllerBase
     {
         private readonly InfluxDBService _InfluxDbService;
-        private readonly DBAdminContext _adminContext;
         private readonly IMapper _mapper;
         private readonly IServiceProvider _serviceProvider;
 
@@ -27,7 +26,6 @@ namespace Gruppo2.WebApp.Controllers
         {
             _InfluxDbService = influxDbService;
             _mapper = mapper;
-            _adminContext = adminContext;
             _serviceProvider = serviceProvider;
         }
 
@@ -67,14 +65,7 @@ namespace Gruppo2.WebApp.Controllers
         }
 
 
-        [HttpPost("AddNotificationError")]
-        public async Task<bool> AddNotificationError(NotificationError error)
-        {
-            //_errorService.PostNotificationError(error);
-            _adminContext.NotificationError.Add(error);
-            await _adminContext.SaveChangesAsync();
-            return true;
-        }
+       
 
 
 
@@ -107,6 +98,8 @@ namespace Gruppo2.WebApp.Controllers
             pulseRate = InitPulseRate();
             Console.WriteLine($"Init battito cardiaco: {pulseRate}\n\n");
 
+            pulseRate = 205;
+
             while (startTime.AddSeconds(duration) > DateTime.Now)
             {
 
@@ -115,13 +108,16 @@ namespace Gruppo2.WebApp.Controllers
                 if (pulseRate > 30 && pulseRate < 200)
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate}");
+
+                    await PopulateFromSimulator(pulseRate, geoCoordinates, idActivityGuid, nPools);
+
                     ModifyPulseRate(ref pulseRate);
                 }
                 else
                 {
                     Console.WriteLine($"Battito cardiaco: {pulseRate} - giro precedente fuori soglia!");
-                    ReturnToNormalPulseRate(ref pulseRate);
 
+                    await PopulateFromSimulator(pulseRate, geoCoordinates, idActivityGuid, nPools);
 
                     Guid idDeviceGuid = Guid.Parse(idDevice);
                     Guid idUserGuid = Guid.Parse(idUser);
@@ -134,20 +130,32 @@ namespace Gruppo2.WebApp.Controllers
                     notificationError.Id = Guid.NewGuid();
                     notificationError.PulseRate = pulseRate;
                     notificationError.Date = DateTime.Now;
-                    await AddNotificationError(notificationError);
+                    adminContext.NotificationError.Add(notificationError);
+                    await adminContext.SaveChangesAsync();
+
+                    ReturnToNormalPulseRate(ref pulseRate);
                 }
 
-                DataFromSimulator dataFromSimulator = new DataFromSimulator();
-                dataFromSimulator.PulseRate = pulseRate;
-                dataFromSimulator.GeoCoordinates = geoCoordinates;
-                dataFromSimulator.IdActivity = idActivityGuid.ToString();
-                dataFromSimulator.NoPools = nPools;
-                await SendFromSimulator(dataFromSimulator);
+
 
                 Thread.Sleep(10000);
             }
         }
 
+
+        public async Task<ActionResult> PopulateFromSimulator(int pulseRate, string geoCoordinates, Guid idActivityGuid, int nPools)
+        {
+            DataFromSimulator dataFromSimulator = new DataFromSimulator();
+            dataFromSimulator.PulseRate = pulseRate;
+            dataFromSimulator.GeoCoordinates = geoCoordinates;
+            dataFromSimulator.IdActivity = idActivityGuid.ToString();
+            dataFromSimulator.NoPools = nPools;
+
+            await SendFromSimulator(dataFromSimulator);
+            return Ok();
+        }
+
+            
         #region GeographicCoordinates
         static string InitGeoCoordinates()
         {

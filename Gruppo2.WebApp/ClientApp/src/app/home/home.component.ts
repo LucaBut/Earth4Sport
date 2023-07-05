@@ -131,7 +131,7 @@ export class HomeComponent {
 
   startSimulator()
   {
-    let idActivity = '03333333-3333-3333-3333-333333333334'
+    let idActivity = '03333333-3333-3333-3333-333333333555'
     let idDevice = '03333333-3333-3333-3333-33333333333a'
     let idUser = '03333333-3333-3333-3333-333333333333'
     this.http.get(`${this.stringConnection}/influx/` + idDevice + '/' + idUser).subscribe()
