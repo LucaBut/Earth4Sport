@@ -98,8 +98,6 @@ namespace Gruppo2.WebApp.Controllers
             pulseRate = InitPulseRate();
             Console.WriteLine($"Init battito cardiaco: {pulseRate}\n\n");
 
-            pulseRate = 205;
-
             while (startTime.AddSeconds(duration) > DateTime.Now)
             {
 
