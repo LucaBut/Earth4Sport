@@ -2,10 +2,13 @@
 {
     public class NotificationErrorDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid IdActivity { get; set; }
         public Guid IdDevice { get; set; }
-        public string PulseRate { get; set; }
-        public DateTime Created { get; set; }
+        public string nameDevice { get; set; } = string.Empty;
+        public Guid IdUser { get; set; }
+        public string nameUser { get; set; } = string.Empty;
+        public int PulseRate { get; set; }
+        public DateTime Date { get; set; }
     }
 }

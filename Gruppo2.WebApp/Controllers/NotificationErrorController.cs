@@ -26,17 +26,48 @@ namespace Gruppo2.WebApp.Controllers
         [HttpGet("GetNotificationsErrors")]
         public async Task<ActionResult<IEnumerable<NotificationErrorDto>>> GetNotificationsErrors()
         {
+
             List<NotificationError> notificationsError = new List<NotificationError>();
-            notificationsError = await _adminContext.NotificationError.ToListAsync();
+            try
+            {
+
+                notificationsError = await _adminContext.NotificationError.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex.Message}");
+            }
+
 
             if (!notificationsError.Any())
                 return NoContent();
 
             List<NotificationErrorDto> errorsDto = new List<NotificationErrorDto>();
 
-            foreach(NotificationError error in notificationsError)
+
+
+            List<Guid> idsUsers = new List<Guid>();
+            idsUsers = notificationsError.Select(x => x.IdUser).ToList();
+
+            List<Guid> idsDevices = new List<Guid>();
+            idsDevices = notificationsError.Select(x => x.IdDevice).ToList();
+
+            List<User> usersSelected = new List<User>();
+            usersSelected = await _context.User.Where(x => idsUsers.Contains(x.Id)).ToListAsync();
+
+            List<Device> devicesSelected = new List<Device>();
+            devicesSelected = await _context.Device.Where(x => idsDevices.Contains(x.Id)).ToListAsync();
+
+
+
+            foreach (NotificationError error in notificationsError)
             {
+                User userSelected = new User();
+                userSelected = usersSelected.First(x => x.Id == error.IdUser);
+
                 NotificationErrorDto _error = new NotificationErrorDto();
+                _error.nameUser = userSelected.Name + " " + userSelected.Surname;
+                _error.nameDevice = devicesSelected.First(x => x.Id == error.IdDevice).Name;
                 _mapper.Map(error, _error);
                 errorsDto.Add(_error);
             }

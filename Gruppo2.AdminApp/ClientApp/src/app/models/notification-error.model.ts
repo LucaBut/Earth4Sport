@@ -2,7 +2,9 @@ export interface NotificationErrorModel {
   id: string,
   idActivity: string,
   idDevice: string,
+  nameDevice: string,
   idUser: string,
+  nameUser: string,
   created: Date,
   pulseRate: number
 }
