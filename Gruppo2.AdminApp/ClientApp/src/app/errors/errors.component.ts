@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NotificationErrorModel } from '../models/notification-error.model';
 import { HttpClient } from '@angular/common/http';
-import { notificationErrorModelData } from '../models/notification-error.model';
 
 @Component({
   selector: 'app-errors',
