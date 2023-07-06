@@ -131,9 +131,8 @@ export class HomeComponent {
 
   startSimulator()
   {
-    let idActivity = '03333333-3333-3333-3333-333333333555'
-    let idDevice = '03333333-3333-3333-3333-33333333333a'
-    let idUser = '03333333-3333-3333-3333-333333333333'
+    let idDevice = this.homeService.devices.find(x => x.name == this.homeService.deviceSelectedName)?.id
+    let idUser = this.homeService.user.id
     this.http.get(`${this.stringConnection}/influx/` + idDevice + '/' + idUser).subscribe()
   }
   stopSimulator()

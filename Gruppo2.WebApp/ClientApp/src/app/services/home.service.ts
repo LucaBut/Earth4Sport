@@ -21,6 +21,7 @@ export class homeService {
   activityNameSelected: any
   public activityContents: any[] = []
   prodUrl = 'https://gruppo2webapp20230608143238.azurewebsites.net/'
+  localUrl = 'https://localhost:7042/'
 
   constructor(private http: HttpClient) { }
 
@@ -94,7 +95,7 @@ export class homeService {
   getActivityContentsByIDActivity(idActivityStr: any)
   {
     this.activityContents = []
-    this.http.get<ActivityContentModel[]>(this.prodUrl + `/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
+    this.http.get<ActivityContentModel[]>(this.localUrl + `influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
       {
         if(data != null)
         {

@@ -52,6 +52,7 @@ builder.Services.AddCors(options =>
                       {
                           policy.WithOrigins("https://localhost:7042",
                                               "http://localhost:5151",
+                                              "https://gruppo2webapp20230608143238.azurewebsites.net",
                                               "http://localhost:44490").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                       });
 });
