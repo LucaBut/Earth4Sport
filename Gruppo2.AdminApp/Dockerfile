@@ -11,6 +11,9 @@ COPY ["Gruppo2.AdminApp/Gruppo2.AdminApp.csproj", "Gruppo2.AdminApp/"]
 RUN dotnet restore "Gruppo2.AdminApp/Gruppo2.AdminApp.csproj"
 COPY . .
 WORKDIR "/src/Gruppo2.AdminApp"
+RUN apt-get update -yq && apt-get upgrade -yq && apt-get install -yq curl git nano
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
+RUN npm install -g npm
 RUN dotnet build "Gruppo2.AdminApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
