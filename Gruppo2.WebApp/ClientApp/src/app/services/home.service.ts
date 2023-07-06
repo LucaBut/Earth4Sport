@@ -95,7 +95,7 @@ export class homeService {
   getActivityContentsByIDActivity(idActivityStr: any)
   {
     this.activityContents = []
-    this.http.get<ActivityContentModel[]>(this.localUrl + `influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
+    this.http.get<ActivityContentModel[]>(this.prodUrl + `influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
       {
         if(data != null)
         {
