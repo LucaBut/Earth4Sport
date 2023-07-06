@@ -7,13 +7,13 @@ export interface NotificationErrorModel {
   pulseRate: number
 }
 
-export const notificationErrorModelData: NotificationErrorModel[] = [
-  {
-    id: 'dd',
-    idActivity: "ssf",
-    idDevice: "fdfdf",
-    idUser: "ddgdg",
-    created: new Date(),
-    pulseRate: 67
-  }
-]
+//export const notificationErrorModelData: NotificationErrorModel[] = [
+//  {
+//    id: 'dd',
+//    idActivity: "ssf",
+//    idDevice: "fdfdf",
+//    idUser: "ddgdg",
+//    created: new Date(),
+//    pulseRate: 67
+//  }
+//]
