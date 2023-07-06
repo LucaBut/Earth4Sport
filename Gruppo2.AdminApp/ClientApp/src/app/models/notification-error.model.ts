@@ -5,7 +5,7 @@ export interface NotificationErrorModel {
   nameDevice: string,
   idUser: string,
   nameUser: string,
-  created: Date,
+  date: Date,
   pulseRate: number
 }
 

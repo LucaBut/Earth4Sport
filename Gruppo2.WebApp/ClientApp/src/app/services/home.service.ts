@@ -20,12 +20,13 @@ export class homeService {
   allActivitiesNames: any[] = []
   activityNameSelected: any
   public activityContents: any[] = []
+  prodUrl = 'https://gruppo2webapp20230608143238.azurewebsites.net/'
 
   constructor(private http: HttpClient) { }
 
   getUser(mail: any){
     this.http
-      .get<UserModel>(`https://localhost:7042/user/GetUserByMail/${mail}`)
+      .get<UserModel>(this.prodUrl + `/user/GetUserByMail/${mail}`)
       .subscribe(result => {
         if(result != null)
         {
@@ -43,7 +44,7 @@ export class homeService {
     this.nameDevices = []
     this.deviceSelectedName = ''
     this.http
-      .get<DeviceModel[]>(`https://localhost:7042/device/GetDevicesbyIDUser/${id}`)
+      .get<DeviceModel[]>(this.prodUrl + `/device/GetDevicesbyIDUser/${id}`)
       .subscribe(result => {
         if(result != null)
         {
@@ -64,7 +65,7 @@ export class homeService {
     let idDevice = this.devices.find(x => x.name == nameDevice)?.id;
     let idUser = this.user.id;
 
-    this.http.get(`https://localhost:7042/influx/start-simulator/${idDevice}/${idUser}`).subscribe();
+    this.http.get(this.prodUrl + `/influx/start-simulator/${idDevice}/${idUser}`).subscribe();
   }
 
 
@@ -74,7 +75,7 @@ export class homeService {
     this.allActivitiesNames = []
     this.activityContents = []
     let idDeviceStr = this.devices.find(x => x.name == nameDevice)?.id.toString()
-    this.http.get<ActivityModel[]>(`https://localhost:7042/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
+    this.http.get<ActivityModel[]>(this.prodUrl + `/activity/GetActivitiesbyIDDevice/` + idDeviceStr).subscribe(activities =>
     {
       if(activities != null)
       {
@@ -93,7 +94,7 @@ export class homeService {
   getActivityContentsByIDActivity(idActivityStr: any)
   {
     this.activityContents = []
-    this.http.get<ActivityContentModel[]>(`https://localhost:7042/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
+    this.http.get<ActivityContentModel[]>(this.prodUrl + `/influx/GetActivitiesContentbyIDActivity/` + idActivityStr).subscribe(data =>
       {
         if(data != null)
         {
