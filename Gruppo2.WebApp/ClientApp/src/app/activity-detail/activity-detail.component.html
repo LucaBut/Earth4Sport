@@ -21,4 +21,8 @@
     <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"></dxo-legend>
     <dxo-tooltip [enabled]="true"></dxo-tooltip>
   </dx-chart>
+
+  <div *ngIf="service.activityContents.length > 0">
+    <h4>Position: {{getFirstPosition()}} </h4>
+  </div>
 </div>

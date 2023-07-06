@@ -32,4 +32,10 @@ export class ActivityDetailComponent {
   {
     this.service.activityContents = []
   }
+
+  getFirstPosition()
+  {
+    return this.service.activityContents[0].position
+  }
+
 }
